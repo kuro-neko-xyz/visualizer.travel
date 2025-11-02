@@ -3,7 +3,7 @@ import { Tabs } from "expo-router";
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs initialRouteName="flights" screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="flights"
         options={{ title: "Flights", tabBarIcon: () => <Text>✈️</Text> }}
