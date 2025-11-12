@@ -11,23 +11,55 @@ export default function FlightsView() {
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Airport Code</Text>
-        <TextInput style={[styles.cell, styles.input]} placeholder="Origin airport code" />
-        <TextInput style={[styles.cell, styles.input]} placeholder="Destination airport code" />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Origin airport code"
+          placeholderTextColor={"#0000"}
+        />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Destination airport code"
+          placeholderTextColor={"#0000"}
+        />
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Time Zone</Text>
-        <TextInput style={[styles.cell, styles.input]} placeholder="Origin time zone" />
-        <TextInput style={[styles.cell, styles.input]} placeholder="Destination time zone" />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Origin time zone"
+          placeholderTextColor={"#0000"}
+        />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Destination time zone"
+          placeholderTextColor={"#0000"}
+        />
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Date</Text>
-        <TextInput style={[styles.cell, styles.input]} placeholder="Origin date" />
-        <TextInput style={[styles.cell, styles.input]} placeholder="Destination date" />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Origin date"
+          placeholderTextColor={"#0000"}
+        />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Destination date"
+          placeholderTextColor={"#0000"}
+        />
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Time</Text>
-        <TextInput style={[styles.cell, styles.input]} placeholder="Origin time" />
-        <TextInput style={[styles.cell, styles.input]} placeholder="Destination time" />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Origin time"
+          placeholderTextColor={"#0000"}
+        />
+        <TextInput
+          style={[styles.cell, styles.input]}
+          placeholder="Destination time"
+          placeholderTextColor={"#0000"}
+        />
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.button}>
