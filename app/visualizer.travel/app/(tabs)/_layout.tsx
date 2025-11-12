@@ -16,6 +16,12 @@ export default function TabLayout() {
         name="itinerary"
         options={{ title: "Itinerary", tabBarIcon: () => <Text>🗓️</Text> }}
       />
+      <Tabs.Screen
+        name="index"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
