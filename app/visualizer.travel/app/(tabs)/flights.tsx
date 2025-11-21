@@ -1,3 +1,5 @@
+import Select from "@/components/select";
+import { timeZones } from "@/constants/timeZones";
 import styles from "@/styles/view";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -24,43 +26,19 @@ export default function FlightsView() {
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Time Zone</Text>
-        <TextInput
-          style={[styles.cell, styles.input]}
-          placeholder="Origin time zone"
-          placeholderTextColor={"#0000"}
-        />
-        <TextInput
-          style={[styles.cell, styles.input]}
-          placeholder="Destination time zone"
-          placeholderTextColor={"#0000"}
-        />
+        <Select style={[styles.cell, styles.input]} options={timeZones} />
+        <Select style={[styles.cell, styles.input]} options={timeZones} />
       </View>
-      <View style={styles.row}>
+      {/* <View style={styles.row}>
         <Text style={styles.cell}>Date</Text>
-        <TextInput
-          style={[styles.cell, styles.input]}
-          placeholder="Origin date"
-          placeholderTextColor={"#0000"}
-        />
-        <TextInput
-          style={[styles.cell, styles.input]}
-          placeholder="Destination date"
-          placeholderTextColor={"#0000"}
-        />
+        <Select style={[styles.cell, styles.input]} />
+        <Select style={[styles.cell, styles.input]} />
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Time</Text>
-        <TextInput
-          style={[styles.cell, styles.input]}
-          placeholder="Origin time"
-          placeholderTextColor={"#0000"}
-        />
-        <TextInput
-          style={[styles.cell, styles.input]}
-          placeholder="Destination time"
-          placeholderTextColor={"#0000"}
-        />
-      </View>
+        <Select style={[styles.cell, styles.input]} />
+        <Select style={[styles.cell, styles.input]} />
+      </View> */}
       <View style={styles.row}>
         <TouchableOpacity style={styles.button}>
           <Text>Add Flight</Text>
