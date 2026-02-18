@@ -1,7 +1,8 @@
+import DataList from "@/components/datalist";
 import Select from "@/components/select";
 import { timeZones } from "@/constants/timeZones";
 import styles from "@/styles/view";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function FlightsView() {
   return (
@@ -13,12 +14,12 @@ export default function FlightsView() {
       </View>
       <View style={styles.row}>
         <Text style={styles.cell}>Airport Code</Text>
-        <TextInput
+        <DataList
           style={[styles.cell, styles.input]}
           placeholder="Origin airport code"
           placeholderTextColor={"#0000"}
         />
-        <TextInput
+        <DataList
           style={[styles.cell, styles.input]}
           placeholder="Destination airport code"
           placeholderTextColor={"#0000"}
