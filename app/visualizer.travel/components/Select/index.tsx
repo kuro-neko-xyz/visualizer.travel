@@ -1,5 +1,5 @@
 import { SelectOption, SelectOptions } from "@/models/SelectOption";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -19,26 +19,28 @@ import Animated, {
 } from "react-native-reanimated";
 
 interface SelectProps extends React.ComponentProps<typeof TouchableOpacity> {
+  onChange?: (option: SelectOption) => void;
   options: SelectOptions;
+  value?: SelectOption | null;
 }
 
-export default function Select({ options, ...props }: SelectProps) {
+export default function Select({
+  onChange,
+  options,
+  value,
+  ...props
+}: SelectProps) {
+  if (value !== undefined && !onChange) {
+    throw new Error("If value is provided, onChange must also be provided.");
+  }
+
+  if (value === undefined && onChange) {
+    throw new Error("If onChange is provided, value must also be provided.");
+  }
+
   const [showModal, setShowModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selected, setSelected] = useState<SelectOption | null>(null);
-  const [labels, setLabels] = useState([
-    options.at(selectedIndex - 5)?.label,
-    options.at(selectedIndex - 4)?.label,
-    options.at(selectedIndex - 3)?.label,
-    options.at(selectedIndex - 2)?.label,
-    options.at(selectedIndex - 1)?.label,
-    options[selectedIndex].label,
-    options[(selectedIndex + 1) % options.length].label,
-    options[(selectedIndex + 2) % options.length].label,
-    options[(selectedIndex + 3) % options.length].label,
-    options[(selectedIndex + 4) % options.length].label,
-    options[(selectedIndex + 5) % options.length].label,
-  ]);
 
   const y = useSharedValue(0);
   const starting = useSharedValue(0);
@@ -46,23 +48,6 @@ export default function Select({ options, ...props }: SelectProps) {
   const gesture = Gesture.Pan();
 
   const updateSelectedIndex = (displacement: number) => {
-    console.log(displacement);
-    if (displacement > 0) {
-      setLabels(() => {
-        const newLabels = [...labels];
-        newLabels.push(options.at((selectedIndex + 6) % options.length)?.label);
-        newLabels.shift();
-        return newLabels;
-      });
-    } else {
-      setLabels(() => {
-        const newLabels = [...labels];
-        newLabels.unshift(options.at(selectedIndex - 6)?.label);
-        newLabels.pop();
-        return newLabels;
-      });
-    }
-
     setSelectedIndex((prev) => {
       const newIndex = prev + displacement;
       if (newIndex < 0) {
@@ -144,13 +129,14 @@ export default function Select({ options, ...props }: SelectProps) {
 
   const handleSelectClick = () => {
     setSelected(options[selectedIndex]);
+    onChange?.(options[selectedIndex]);
     handleCloseModal();
   };
 
   return (
     <View>
       <TouchableOpacity {...props} onPress={handleOpenModal}>
-        <Text>{selected?.label}</Text>
+        <Text>{value?.label ?? selected?.label}</Text>
       </TouchableOpacity>
       <Modal transparent={true} visible={showModal} animationType="slide">
         <View style={styles.container}>
@@ -163,31 +149,31 @@ export default function Select({ options, ...props }: SelectProps) {
             <GestureDetector gesture={gesture}>
               <Animated.View style={[styles.content, animatedContainer]}>
                 <Animated.Text style={[styles.value, animatedNegative4]}>
-                  {labels[1]}
+                  {options.at(selectedIndex - 4)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedNegative3]}>
-                  {labels[2]}
+                  {options.at(selectedIndex - 3)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedNegative2]}>
-                  {labels[3]}
+                  {options.at(selectedIndex - 2)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedNegative1]}>
-                  {labels[4]}
+                  {options.at(selectedIndex - 1)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedCenter]}>
-                  {labels[5]}
+                  {options[selectedIndex].label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive1]}>
-                  {labels[6]}
+                  {options[(selectedIndex + 1) % options.length].label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive2]}>
-                  {labels[7]}
+                  {options[(selectedIndex + 2) % options.length].label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive3]}>
-                  {labels[8]}
+                  {options[(selectedIndex + 3) % options.length].label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive4]}>
-                  {labels[9]}
+                  {options[(selectedIndex + 4) % options.length].label}
                 </Animated.Text>
               </Animated.View>
             </GestureDetector>

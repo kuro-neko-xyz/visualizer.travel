@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
   input: {
     borderStyle: "solid",
     borderWidth: 1,
-    borderColor: "#000",
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
