@@ -1,14 +1,9 @@
-import Select from "@/components/Select";
-import { timeZones } from "@/constants/timeZones";
 import useFlights from "@/hooks/useFlights";
 import { SelectOption } from "@/models/SelectOption";
-import styles from "@/styles/view";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import DatePicker from "react-native-date-picker";
-import handleAddFlight from "@/helpers/flights/handleAddFlight";
-import setAirportCode from "@/helpers/flights/handleSetAirportCode";
+import { StyleSheet, View } from "react-native";
 import FlightInfo from "@/components/FlightInfo";
+import FlightForm from "@/components/FlightForn";
 
 export default function FlightsView() {
   const [flights, storeFlights] = useFlights();
@@ -39,138 +34,35 @@ export default function FlightsView() {
           storeFlights={storeFlights}
         />
       ))}
-      <DatePicker
-        date={isDeparture ? departureDate : arrivalDate}
-        modal
-        mode={isTime ? "time" : "date"}
-        onCancel={() => {
-          setShowDatePicker(false);
-        }}
-        onConfirm={(date) => {
-          if (isDeparture) {
-            setDepartureDate(date);
-          } else {
-            setArrivalDate(date);
-          }
-          setShowDatePicker(false);
-        }}
-        open={showDatePicker}
+      <FlightForm
+        arrivalDate={arrivalDate}
+        departureDate={departureDate}
+        destinationAirportCode={destinationAirportCode}
+        destinationTimeZone={destinationTimeZone}
+        isDeparture={isDeparture}
+        isTime={isTime}
+        originAirportCode={originAirportCode}
+        originTimeZone={originTimeZone}
+        setArrivalDate={setArrivalDate}
+        setDepartureDate={setDepartureDate}
+        setDestinationAirportCode={setDestinationAirportCode}
+        setDestinationTimeZone={setDestinationTimeZone}
+        setIsDeparture={setIsDeparture}
+        setIsTime={setIsTime}
+        setOriginAirportCode={setOriginAirportCode}
+        setOriginTimeZone={setOriginTimeZone}
+        setShowDatePicker={setShowDatePicker}
+        showDatePicker={showDatePicker}
+        storeFlights={storeFlights}
       />
-      <View style={styles.row}>
-        <View style={styles.cell}></View>
-        <Text style={styles.cell}>Origin</Text>
-        <Text style={styles.cell}>Destination</Text>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.cell}>Airport Code</Text>
-        <TextInput
-          autoCapitalize="characters"
-          onChangeText={(code) => setAirportCode(code, setOriginAirportCode)}
-          placeholder="Origin airport code"
-          placeholderTextColor={"#0000"}
-          style={[styles.cell, styles.input]}
-          value={originAirportCode}
-        />
-        <TextInput
-          autoCapitalize="characters"
-          onChangeText={(code) =>
-            setAirportCode(code, setDestinationAirportCode)
-          }
-          placeholder="Destination airport code"
-          placeholderTextColor={"#0000"}
-          style={[styles.cell, styles.input]}
-          value={destinationAirportCode}
-        />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.cell}>Time Zone</Text>
-        <Select
-          style={[styles.cell, styles.input]}
-          onChange={setOriginTimeZone}
-          options={timeZones}
-          value={originTimeZone}
-        />
-        <Select
-          style={[styles.cell, styles.input]}
-          onChange={setDestinationTimeZone}
-          options={timeZones}
-          value={destinationTimeZone}
-        />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.cell}>Date (Dep./Arr.)</Text>
-        <TouchableOpacity
-          style={[styles.cell, styles.input]}
-          onPress={() => {
-            setIsDeparture(true);
-            setIsTime(false);
-            setShowDatePicker(true);
-          }}
-        >
-          <Text>{departureDate.toLocaleDateString()}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.cell, styles.input]}
-          onPress={() => {
-            setIsDeparture(false);
-            setIsTime(false);
-            setShowDatePicker(true);
-          }}
-        >
-          <Text>{arrivalDate.toLocaleDateString()}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.cell}>Time (Dep./Arr.)</Text>
-        <TouchableOpacity
-          style={[styles.cell, styles.input]}
-          onPress={() => {
-            setIsDeparture(true);
-            setIsTime(true);
-            setShowDatePicker(true);
-          }}
-        >
-          <Text>
-            {departureDate.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.cell, styles.input]}
-          onPress={() => {
-            setIsDeparture(false);
-            setIsTime(true);
-            setShowDatePicker(true);
-          }}
-        >
-          <Text>
-            {arrivalDate.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.row}>
-        <TouchableOpacity
-          onPress={() =>
-            handleAddFlight({
-              arrivalDate,
-              departureDate,
-              destinationAirportCode,
-              destinationTimeZone,
-              originAirportCode,
-              originTimeZone,
-              storeFlights,
-            })
-          }
-          style={styles.button}
-        >
-          <Text>Add Flight</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
