@@ -1,11 +1,11 @@
 import useFlights from "@/hooks/useFlights";
 import { SelectOption } from "@/models/SelectOption";
-import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { FC, useState } from "react";
 import FlightInfo from "@/components/FlightInfo";
 import FlightForm from "@/components/FlightForn";
+import ContainerTab from "@/components/ContainerTab";
 
-export default function FlightsView() {
+const FlightsView: FC = () => {
   const [flights, storeFlights] = useFlights();
 
   const [originAirportCode, setOriginAirportCode] = useState<string>("");
@@ -26,7 +26,7 @@ export default function FlightsView() {
   const [isTime, setIsTime] = useState<boolean>();
 
   return (
-    <View style={styles.container}>
+    <ContainerTab>
       {flights.map((flight) => (
         <FlightInfo
           key={flight.id}
@@ -55,14 +55,8 @@ export default function FlightsView() {
         showDatePicker={showDatePicker}
         storeFlights={storeFlights}
       />
-    </View>
+    </ContainerTab>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+export default FlightsView;
