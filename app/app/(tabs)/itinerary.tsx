@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import ContainerTab from "@/components/ContainerTab";
+import { Text } from "react-native";
 
 export default function ItineraryView() {
   return (
-    <View>
+    <ContainerTab>
       <Text>Itinerary Screen</Text>
-    </View>
+    </ContainerTab>
   );
 }

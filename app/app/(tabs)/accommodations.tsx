@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import ContainerTab from "@/components/ContainerTab";
+import { Text } from "react-native";
 
 export default function AccommodationsView() {
   return (
-    <View>
+    <ContainerTab>
       <Text>Accommodations Screen</Text>
-    </View>
+    </ContainerTab>
   );
 }
