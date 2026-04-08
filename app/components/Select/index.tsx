@@ -17,6 +17,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+import CloseButton from "../CloseButton";
 
 interface SelectProps extends React.ComponentProps<typeof TouchableOpacity> {
   onChange?: (option: SelectOption) => void;
@@ -140,10 +141,7 @@ export default function Select({
       </TouchableOpacity>
       <Modal transparent={true} visible={showModal} animationType="slide">
         <View style={styles.container}>
-          <TouchableOpacity
-            onPress={handleCloseModal}
-            style={styles.closeButton}
-          />
+          <CloseButton handleCloseModal={handleCloseModal} wide />
           <View style={styles.selector} />
           <GestureHandlerRootView>
             <GestureDetector gesture={gesture}>
@@ -203,15 +201,6 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     backgroundColor: "transparent",
-  },
-  closeButton: {
-    position: "absolute",
-    top: 40,
-    right: 20,
-    zIndex: 1,
-    padding: 20,
-    backgroundColor: "red",
-    borderRadius: "50%",
   },
   selectButton: {
     alignItems: "center",
