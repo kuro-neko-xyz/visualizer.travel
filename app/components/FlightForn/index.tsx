@@ -57,6 +57,12 @@ const FlightForm: FC<FlightFormProps> = ({
   showDatePicker,
   storeFlights,
 }) => {
+  const isFormValid =
+    originAirportCode &&
+    destinationAirportCode &&
+    originTimeZone &&
+    destinationTimeZone;
+
   return (
     <View style={styles.container}>
       <DatePicker
@@ -175,6 +181,7 @@ const FlightForm: FC<FlightFormProps> = ({
       </View>
       <View style={styles.row}>
         <TouchableOpacity
+          disabled={!isFormValid}
           onPress={() =>
             handleAddFlight({
               arrivalDate,
@@ -186,7 +193,10 @@ const FlightForm: FC<FlightFormProps> = ({
               storeFlights,
             })
           }
-          style={styles.button}
+          style={[
+            styles.button,
+            isFormValid ? styles.enabled : styles.disabled,
+          ]}
         >
           <Text>Add Flight</Text>
         </TouchableOpacity>
@@ -207,7 +217,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-
   cell: {
     height: 40,
     width: 100,
@@ -215,7 +224,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     marginHorizontal: 5,
   },
-
   input: {
     borderStyle: "solid",
     borderWidth: 1,
@@ -223,11 +231,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   button: {
     borderRadius: 5,
-    backgroundColor: "#007AFF",
     paddingVertical: 10,
     paddingHorizontal: 20,
+  },
+  enabled: {
+    backgroundColor: "#007AFF",
+  },
+  disabled: {
+    backgroundColor: "#CCCCCC",
   },
 });
