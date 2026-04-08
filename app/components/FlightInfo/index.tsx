@@ -1,7 +1,8 @@
 import handleDeleteFlight from "@/helpers/flights/handleDeleteFlight";
 import { Flight, Flights } from "@/models/Flight";
 import { Dispatch, FC, SetStateAction } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import CloseButton from "../CloseButton";
 
 interface FlightInfoProps {
   flight: Flight;
@@ -36,13 +37,11 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, storeFlights }) => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity
-        onPress={() =>
+      <CloseButton
+        handleCloseModal={() =>
           handleDeleteFlight({ flightId: flight.id, storeFlights })
         }
-      >
-        <Text>❌</Text>
-      </TouchableOpacity>
+      />
     </View>
   );
 };
