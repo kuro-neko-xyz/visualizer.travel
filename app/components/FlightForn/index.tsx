@@ -134,12 +134,14 @@ const FlightForm: FC<FlightFormProps> = ({
               style={[styles.cell, styles.input]}
               onChange={setOriginTimeZone}
               options={timeZones}
+              title="Select Origin Time Zone"
               value={originTimeZone}
             />
             <Select
               style={[styles.cell, styles.input]}
               onChange={setDestinationTimeZone}
               options={timeZones}
+              title="Select Destination Time Zone"
               value={destinationTimeZone}
             />
           </View>

@@ -17,17 +17,18 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import CloseButton from "../CloseButton";
 
 interface SelectProps extends React.ComponentProps<typeof TouchableOpacity> {
   onChange?: (option: SelectOption) => void;
   options: SelectOptions;
+  title?: string;
   value?: SelectOption | null;
 }
 
 export default function Select({
   onChange,
   options,
+  title,
   value,
   ...props
 }: SelectProps) {
@@ -139,9 +140,13 @@ export default function Select({
       <TouchableOpacity {...props} onPress={handleOpenModal}>
         <Text>{value?.label ?? selected?.label}</Text>
       </TouchableOpacity>
-      <Modal transparent={true} visible={showModal} animationType="slide">
+      <Modal
+        animationType="slide"
+        backdropColor="#00000000"
+        visible={showModal}
+      >
         <View style={styles.container}>
-          <CloseButton handleCloseModal={handleCloseModal} wide />
+          {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.selector} />
           <GestureHandlerRootView>
             <GestureDetector gesture={gesture}>
@@ -176,12 +181,21 @@ export default function Select({
               </Animated.View>
             </GestureDetector>
           </GestureHandlerRootView>
-          <TouchableOpacity
-            onPress={handleSelectClick}
-            style={styles.selectButton}
-          >
-            <Text>Select</Text>
-          </TouchableOpacity>
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={handleCloseModal}
+              style={styles.selectButton}
+            >
+              <Text style={styles.buttonLabel}>Cancel</Text>
+            </TouchableOpacity>
+            <Text style={styles.separator}>|</Text>
+            <TouchableOpacity
+              onPress={handleSelectClick}
+              style={styles.selectButton}
+            >
+              <Text style={styles.buttonLabel}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -191,23 +205,42 @@ export default function Select({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderRadius: 30,
     flex: 1,
     padding: 40,
+    paddingTop: 23,
+    margin: 20,
     marginTop: "auto",
     maxHeight: "50%",
+  },
+  title: {
+    fontSize: 18,
+    fontFamily: "Nunito",
   },
   content: {
     alignItems: "center",
     backgroundColor: "transparent",
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
   selectButton: {
     alignItems: "center",
-    backgroundColor: "limegreen",
     borderRadius: 10,
-    marginTop: 20,
     padding: 15,
+    width: 100,
+  },
+  buttonLabel: {
+    fontFamily: "Nunito",
+    fontWeight: "bold",
+    fontSize: 16,
+    letterSpacing: 1,
+  },
+  separator: {
+    fontSize: 18,
+    color: "gray",
   },
   selector: {
     backgroundColor: "lightgray",
@@ -221,6 +254,7 @@ const styles = StyleSheet.create({
   },
   value: {
     height: 30,
+    fontFamily: "Nunito",
     verticalAlign: "middle",
   },
 });
