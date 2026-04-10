@@ -1,7 +1,7 @@
 import useFlights from "@/hooks/useFlights";
 import { SelectOption } from "@/models/SelectOption";
 import { FC, useState } from "react";
-import FlightForm from "@/components/FlightForn";
+import FlightForm from "@/components/FlightForm";
 import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
 

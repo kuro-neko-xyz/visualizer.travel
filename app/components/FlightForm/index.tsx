@@ -35,7 +35,7 @@ interface FlightFormProps {
   setOriginTimeZone: Dispatch<SetStateAction<SelectOption | null>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   showDatePicker: boolean;
-  storeFlights: (args: Flights | ((flights: Flights) => Flights)) => void;
+  storeFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const FlightForm: FC<FlightFormProps> = ({
@@ -80,7 +80,7 @@ const FlightForm: FC<FlightFormProps> = ({
       <TouchableOpacity style={styles.addButton} onPress={handleOpenModal}>
         <Text>➕ Add Flight</Text>
       </TouchableOpacity>
-      <Modal transparent={true} visible={showModal} animationType="slide">
+      <Modal animationType="slide" transparent visible={showModal}>
         <View style={styles.content}>
           <CloseButton handleCloseModal={handleCloseModal} wide />
           <DatePicker
