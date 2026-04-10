@@ -15,8 +15,10 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, storeFlights }) => {
       <View style={styles.info}>
         <View style={styles.details}>
           <Text style={styles.header}>{flight.origin.airportCode}</Text>
-          <Text>{new Date(flight.origin.dateTime).toLocaleDateString()}</Text>
-          <Text>
+          <Text style={styles.data}>
+            {new Date(flight.origin.dateTime).toLocaleDateString()}
+          </Text>
+          <Text style={styles.data}>
             {new Date(flight.origin.dateTime).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
@@ -26,10 +28,10 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, storeFlights }) => {
         <Text>✈️</Text>
         <View style={styles.details}>
           <Text style={styles.header}>{flight.destination.airportCode}</Text>
-          <Text>
+          <Text style={styles.data}>
             {new Date(flight.destination.dateTime).toLocaleDateString()}
           </Text>
-          <Text>
+          <Text style={styles.data}>
             {new Date(flight.destination.dateTime).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
@@ -53,16 +55,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "black",
     borderWidth: 1,
-    width: "90%",
-    padding: 10,
+    width: 150,
+    height: 100,
+    margin: 10,
   },
   info: {
     flex: 1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
+    alignItems: "flex-start",
+    padding: 10,
+    marginTop: 25,
   },
   details: {
     display: "flex",
@@ -72,7 +76,14 @@ const styles = StyleSheet.create({
   },
   header: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 14,
+    fontFamily: "Nunito",
+    letterSpacing: 1,
+  },
+  data: {
+    fontSize: 10,
+    fontFamily: "Nunito",
+    letterSpacing: 1,
   },
 });
 
