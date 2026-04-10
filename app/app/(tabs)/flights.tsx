@@ -1,9 +1,9 @@
 import useFlights from "@/hooks/useFlights";
 import { SelectOption } from "@/models/SelectOption";
 import { FC, useState } from "react";
-import FlightInfo from "@/components/FlightInfo";
 import FlightForm from "@/components/FlightForn";
 import ContainerTab from "@/components/ContainerTab";
+import FlightsContainer from "@/components/FlightsContainer";
 
 const FlightsView: FC = () => {
   const [flights, storeFlights] = useFlights();
@@ -27,13 +27,7 @@ const FlightsView: FC = () => {
 
   return (
     <ContainerTab>
-      {flights.map((flight) => (
-        <FlightInfo
-          key={flight.id}
-          flight={flight}
-          storeFlights={storeFlights}
-        />
-      ))}
+      <FlightsContainer flights={flights} storeFlights={storeFlights} />
       <FlightForm
         arrivalDate={arrivalDate}
         departureDate={departureDate}
