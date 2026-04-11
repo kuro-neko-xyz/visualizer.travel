@@ -1,4 +1,4 @@
-import { Accommodations } from "@/models/Accommodations";
+import { Accommodations } from "@/models/Accommodation";
 import { useState } from "react";
 import { storage } from "@/app/_layout";
 
