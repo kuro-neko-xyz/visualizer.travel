@@ -1,4 +1,4 @@
-import { Accommodation, Accommodations } from "@/models/Accommodations";
+import { Accommodation, Accommodations } from "@/models/Accommodation";
 import { SelectOption } from "@/models/SelectOption";
 import { randomUUID } from "expo-crypto";
 import { Dispatch, SetStateAction } from "react";

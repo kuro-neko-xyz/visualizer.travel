@@ -1,4 +1,5 @@
 import AccommodationForm from "@/components/AccommodationForm";
+import AccommodationsContainer from "@/components/AccommodationsContainer";
 import ContainerTab from "@/components/ContainerTab";
 import useAccommodations from "@/hooks/useAccommodations";
 import { SelectOption } from "@/models/SelectOption";
@@ -21,7 +22,10 @@ export default function AccommodationsView() {
 
   return (
     <ContainerTab>
-      <Text>{JSON.stringify(accommodations)}</Text>
+      <AccommodationsContainer
+        accommodations={accommodations}
+        storeAccommodations={storeAccommodations}
+      />
       <AccommodationForm
         accommodationAirportCode={airportCode}
         checkInDate={checkInDate}
