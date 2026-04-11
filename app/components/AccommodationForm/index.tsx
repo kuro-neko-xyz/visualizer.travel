@@ -14,7 +14,7 @@ import Select from "../Select";
 import { timeZones } from "@/constants/timeZones";
 import { SelectOption } from "@/models/SelectOption";
 import handleAddAccommodation from "@/helpers/accommodations/handleAddAccommodation";
-import { Accommodations } from "@/models/Accommodations";
+import { Accommodations } from "@/models/Accommodation";
 
 interface AccommodationFormProps {
   accommodationAirportCode: string;
