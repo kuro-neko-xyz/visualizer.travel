@@ -5,12 +5,12 @@ import AccommodationInfo from "../AccommodationInfo";
 
 interface AccommodationContainerProps {
   accommodations: Accommodations;
-  storeAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
 }
 
 const AccommodationsContainer: FC<AccommodationContainerProps> = ({
   accommodations,
-  storeAccommodations,
+  setAccommodations,
 }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -18,7 +18,7 @@ const AccommodationsContainer: FC<AccommodationContainerProps> = ({
         <AccommodationInfo
           key={accommodation.id}
           accommodation={accommodation}
-          storeAccommodations={storeAccommodations}
+          setAccommodations={setAccommodations}
         />
       ))}
     </ScrollView>

@@ -1,13 +1,12 @@
 import AccommodationForm from "@/components/AccommodationForm";
 import AccommodationsContainer from "@/components/AccommodationsContainer";
 import ContainerTab from "@/components/ContainerTab";
-import useAccommodations from "@/hooks/useAccommodations";
+import useStorage from "@/hooks/useStorage";
 import { SelectOption } from "@/models/SelectOption";
 import { useState } from "react";
-import { Text } from "react-native";
 
 export default function AccommodationsView() {
-  const [accommodations, storeAccommodations] = useAccommodations();
+  const [accommodations, setAccommodations] = useStorage("accommodations", []);
 
   const [airportCode, setAirportCode] = useState<string>("");
 
@@ -24,7 +23,7 @@ export default function AccommodationsView() {
     <ContainerTab>
       <AccommodationsContainer
         accommodations={accommodations}
-        storeAccommodations={storeAccommodations}
+        setAccommodations={setAccommodations}
       />
       <AccommodationForm
         accommodationAirportCode={airportCode}
@@ -41,7 +40,7 @@ export default function AccommodationsView() {
         setTimeZone={setTimeZone}
         showDatePicker={showDatePicker}
         timeZone={timeZone}
-        storeAccommodations={storeAccommodations}
+        setAccommodations={setAccommodations}
       />
     </ContainerTab>
   );

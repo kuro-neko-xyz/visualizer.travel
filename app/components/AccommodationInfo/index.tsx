@@ -6,12 +6,12 @@ import { Accommodation, Accommodations } from "@/models/Accommodation";
 
 interface AccommodationInfoProps {
   accommodation: Accommodation;
-  storeAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
 }
 
 const AccommodationInfo: FC<AccommodationInfoProps> = ({
   accommodation,
-  storeAccommodations,
+  setAccommodations,
 }) => {
   return (
     <View style={styles.container}>
@@ -46,7 +46,7 @@ const AccommodationInfo: FC<AccommodationInfoProps> = ({
         handleCloseModal={() =>
           handleDeleteAccommodation({
             accommodationId: accommodation.id,
-            storeAccommodations,
+            setAccommodations,
           })
         }
       />

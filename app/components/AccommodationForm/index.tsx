@@ -30,7 +30,7 @@ interface AccommodationFormProps {
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   setTimeZone: Dispatch<SetStateAction<SelectOption | null>>;
   showDatePicker: boolean;
-  storeAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
   timeZone: SelectOption | null;
 }
 
@@ -48,7 +48,7 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
   setShowDatePicker,
   setTimeZone,
   showDatePicker,
-  storeAccommodations,
+  setAccommodations,
   timeZone,
 }) => {
   const [showModal, setShowModal] = useState(false);
@@ -186,7 +186,7 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
                   checkInDate,
                   checkOutDate,
                   timeZone,
-                  storeAccommodations,
+                  setAccommodations,
                 })
               }
               style={[
