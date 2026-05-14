@@ -1,0 +1,17 @@
+{
+  "name": "visualizer.travel",
+  "version": "1.0.0",
+  "description": "",
+  "license": "GPL-3.0",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "populate": "node seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0"
+  }
+}
