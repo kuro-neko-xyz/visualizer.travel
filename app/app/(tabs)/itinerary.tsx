@@ -3,11 +3,11 @@ import getDayAfter from "@/helpers/itinerary/getDayAfter";
 import getDayBefore from "@/helpers/itinerary/getDayBefore";
 import getSortedFlights from "@/helpers/itinerary/getSortedFlights";
 import transformItinerary from "@/helpers/itinerary/transformItinerary";
-import useFlights from "@/hooks/useFlights";
+import useStorage from "@/hooks/useStorage";
 import { Text } from "react-native";
 
 export default function ItineraryView() {
-  const [flights] = useFlights();
+  const [flights] = useStorage("flights", []);
 
   const sortedFlights = getSortedFlights(flights);
   const dayBefore = getDayBefore(sortedFlights);

@@ -3,14 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 
 interface handleDeleteAccommodationParams {
   accommodationId: string;
-  storeAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
 }
 
 const handleDeleteAccommodation = ({
   accommodationId,
-  storeAccommodations,
+  setAccommodations,
 }: handleDeleteAccommodationParams) => {
-  storeAccommodations((prevAccommodations: Accommodations) =>
+  setAccommodations((prevAccommodations: Accommodations) =>
     prevAccommodations.filter(
       (accommodation: Accommodation) => accommodation.id !== accommodationId,
     ),
