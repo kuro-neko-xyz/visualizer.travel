@@ -5,12 +5,12 @@ import FlightInfo from "../FlightInfo";
 
 interface FlightsContainerProps {
   flights: Flights;
-  storeFlights: Dispatch<SetStateAction<Flights>>;
+  setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const FlightsContainer: FC<FlightsContainerProps> = ({
   flights,
-  storeFlights,
+  setFlights,
 }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -18,7 +18,7 @@ const FlightsContainer: FC<FlightsContainerProps> = ({
         <FlightInfo
           key={flight.id}
           flight={flight}
-          storeFlights={storeFlights}
+          setFlights={setFlights}
         />
       ))}
     </ScrollView>

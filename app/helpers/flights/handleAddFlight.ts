@@ -10,7 +10,7 @@ interface HandleAddFlightParams {
   destinationTimeZone: SelectOption | null;
   originAirportCode: string;
   originTimeZone: SelectOption | null;
-  storeFlights: Dispatch<SetStateAction<Flights>>;
+  setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const handleAddFlight = ({
@@ -20,7 +20,7 @@ const handleAddFlight = ({
   destinationTimeZone,
   originAirportCode,
   originTimeZone,
-  storeFlights,
+  setFlights,
 }: HandleAddFlightParams) => {
   const departureYear = departureDate.getFullYear();
   const departureMonth = String(departureDate.getMonth() + 1).padStart(2, "0");
@@ -45,7 +45,7 @@ const handleAddFlight = ({
       dateTime: `${arrivalYear}-${arrivalMonth}-${arrivalDay}T${arrivalHours}:${arrivalMinutes}:00${destinationTimeZone?.value}`,
     },
   };
-  storeFlights((prevFlights: Flights) => [...prevFlights, flightData]);
+  setFlights((prevFlights: Flights) => [...prevFlights, flightData]);
 };
 
 export default handleAddFlight;

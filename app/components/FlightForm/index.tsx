@@ -35,7 +35,7 @@ interface FlightFormProps {
   setOriginTimeZone: Dispatch<SetStateAction<SelectOption | null>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   showDatePicker: boolean;
-  storeFlights: Dispatch<SetStateAction<Flights>>;
+  setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const FlightForm: FC<FlightFormProps> = ({
@@ -57,7 +57,7 @@ const FlightForm: FC<FlightFormProps> = ({
   setOriginTimeZone,
   setShowDatePicker,
   showDatePicker,
-  storeFlights,
+  setFlights,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -212,7 +212,7 @@ const FlightForm: FC<FlightFormProps> = ({
                   destinationTimeZone,
                   originAirportCode,
                   originTimeZone,
-                  storeFlights,
+                  setFlights,
                 })
               }
               style={[

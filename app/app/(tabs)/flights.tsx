@@ -1,4 +1,4 @@
-import useFlights from "@/hooks/useFlights";
+import useStorage from "@/hooks/useStorage";
 import { SelectOption } from "@/models/SelectOption";
 import { FC, useState } from "react";
 import FlightForm from "@/components/FlightForm";
@@ -6,7 +6,7 @@ import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
 
 const FlightsView: FC = () => {
-  const [flights, storeFlights] = useFlights();
+  const [flights, setFlights] = useStorage("flights", []);
 
   const [originAirportCode, setOriginAirportCode] = useState<string>("");
   const [destinationAirportCode, setDestinationAirportCode] =
@@ -27,7 +27,7 @@ const FlightsView: FC = () => {
 
   return (
     <ContainerTab>
-      <FlightsContainer flights={flights} storeFlights={storeFlights} />
+      <FlightsContainer flights={flights} setFlights={setFlights} />
       <FlightForm
         arrivalDate={arrivalDate}
         departureDate={departureDate}
@@ -47,7 +47,7 @@ const FlightsView: FC = () => {
         setOriginTimeZone={setOriginTimeZone}
         setShowDatePicker={setShowDatePicker}
         showDatePicker={showDatePicker}
-        storeFlights={storeFlights}
+        setFlights={setFlights}
       />
     </ContainerTab>
   );
