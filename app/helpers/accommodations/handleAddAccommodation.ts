@@ -8,7 +8,7 @@ interface HandleAddAccommodationProps {
   checkInDate: Date;
   checkOutDate: Date;
   timeZone: SelectOption | null;
-  storeAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
 }
 
 const handleAddAccommodation = ({
@@ -16,7 +16,7 @@ const handleAddAccommodation = ({
   checkInDate,
   checkOutDate,
   timeZone,
-  storeAccommodations,
+  setAccommodations,
 }: HandleAddAccommodationProps) => {
   const checkInYear = checkInDate.getFullYear();
   const checkInMonth = String(checkInDate.getMonth() + 1).padStart(2, "0");
@@ -36,7 +36,7 @@ const handleAddAccommodation = ({
     checkIn: `${checkInYear}-${checkInMonth}-${checkInDay}T${checkInHours}:${checkInMinutes}:00${timeZone?.value}`,
     checkOut: `${checkOutYear}-${checkOutMonth}-${checkOutDay}T${checkOutHours}:${checkOutMinutes}:00${timeZone?.value}`,
   };
-  storeAccommodations((prevAccommodations: Accommodations) => [
+  setAccommodations((prevAccommodations: Accommodations) => [
     ...prevAccommodations,
     accommodationData,
   ]);

@@ -6,10 +6,10 @@ import CloseButton from "../CloseButton";
 
 interface FlightInfoProps {
   flight: Flight;
-  storeFlights: Dispatch<SetStateAction<Flights>>;
+  setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
-const FlightInfo: FC<FlightInfoProps> = ({ flight, storeFlights }) => {
+const FlightInfo: FC<FlightInfoProps> = ({ flight, setFlights }) => {
   return (
     <View style={styles.container}>
       <View style={styles.info}>
@@ -41,7 +41,7 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, storeFlights }) => {
       </View>
       <CloseButton
         handleCloseModal={() =>
-          handleDeleteFlight({ flightId: flight.id, storeFlights })
+          handleDeleteFlight({ flightId: flight.id, setFlights })
         }
       />
     </View>

@@ -3,14 +3,14 @@ import { Dispatch, SetStateAction } from "react";
 
 interface handleDeleteFlightParams {
   flightId: string;
-  storeFlights: Dispatch<SetStateAction<Flights>>;
+  setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const handleDeleteFlight = ({
   flightId,
-  storeFlights,
+  setFlights,
 }: handleDeleteFlightParams) => {
-  storeFlights((prevFlights: Flights) =>
+  setFlights((prevFlights: Flights) =>
     prevFlights.filter((flight: Flight) => flight.id !== flightId),
   );
 };
