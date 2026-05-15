@@ -3,11 +3,11 @@ const fs = require("fs");
 require("dotenv").config();
 
 const client = new Client({
-  user: "visualizer",
-  host: "localhost",
-  database: "visualizer",
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: proces.env.PG_DATABASE,
   password: process.env.PG_PASSWORD,
-  port: 5432,
+  port: process.env.PG_PORT,
 });
 
 async function seedDatabase() {
@@ -72,3 +72,5 @@ async function seedDatabase() {
 }
 
 seedDatabase();
+
+module.exports = client;
