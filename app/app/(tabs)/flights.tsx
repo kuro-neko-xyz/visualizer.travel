@@ -1,22 +1,14 @@
 import useStorage from "@/hooks/useStorage";
-import { SelectOption } from "@/models/SelectOption";
 import { FC, useState } from "react";
 import FlightForm from "@/components/FlightForm";
 import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
+import { Airports } from "@/models/Airport";
 
 const FlightsView: FC = () => {
   const [flights, setFlights] = useStorage("flights", []);
 
-  const [originAirportCode, setOriginAirportCode] = useState<string>("");
-  const [destinationAirportCode, setDestinationAirportCode] =
-    useState<string>("");
-
-  const [originTimeZone, setOriginTimeZone] = useState<SelectOption | null>(
-    null,
-  );
-  const [destinationTimeZone, setDestinationTimeZone] =
-    useState<SelectOption | null>(null);
+  const [originAirport, setOriginAirport] = useState("");
 
   const [departureDate, setDepartureDate] = useState<Date>(new Date());
   const [arrivalDate, setArrivalDate] = useState<Date>(new Date());
@@ -25,29 +17,40 @@ const FlightsView: FC = () => {
   const [isDeparture, setIsDeparture] = useState<boolean>();
   const [isTime, setIsTime] = useState<boolean>();
 
+  const [originOptions, setOriginOptions] = useState<Airports>([]);
+
+  const handleOriginChange = async (search: string) => {
+    if (!search) {
+      setOriginOptions([]);
+    }
+
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}airports?search=${search}`,
+    );
+
+    const data = await response.json();
+
+    setOriginOptions(data);
+  };
+
   return (
     <ContainerTab>
       <FlightsContainer flights={flights} setFlights={setFlights} />
       <FlightForm
         arrivalDate={arrivalDate}
         departureDate={departureDate}
-        destinationAirportCode={destinationAirportCode}
-        destinationTimeZone={destinationTimeZone}
+        handleOriginChange={handleOriginChange}
         isDeparture={isDeparture}
         isTime={isTime}
-        originAirportCode={originAirportCode}
-        originTimeZone={originTimeZone}
+        originAirport={originAirport}
+        originOptions={originOptions}
         setArrivalDate={setArrivalDate}
         setDepartureDate={setDepartureDate}
-        setDestinationAirportCode={setDestinationAirportCode}
-        setDestinationTimeZone={setDestinationTimeZone}
         setIsDeparture={setIsDeparture}
         setIsTime={setIsTime}
-        setOriginAirportCode={setOriginAirportCode}
-        setOriginTimeZone={setOriginTimeZone}
+        setOriginAirport={setOriginAirport}
         setShowDatePicker={setShowDatePicker}
         showDatePicker={showDatePicker}
-        setFlights={setFlights}
       />
     </ContainerTab>
   );
