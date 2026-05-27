@@ -1,63 +1,46 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
-import Select from "@/components/Select";
-import { timeZones } from "@/constants/timeZones";
-import handleAddFlight from "@/helpers/flights/handleAddFlight";
-import setAirportCode from "@/helpers/flights/handleSetAirportCode";
-import { SelectOption } from "@/models/SelectOption";
-import { Flights } from "@/models/Flight";
+// import handleAddFlight from "@/helpers/flights/handleAddFlight";
 import CloseButton from "../CloseButton";
+import Autocomplete from "../Autocomplete";
+import { Airports } from "@/models/Airport";
+import AirportOption from "../AirportOption";
 
 interface FlightFormProps {
   arrivalDate: Date;
   departureDate: Date;
-  destinationAirportCode: string;
-  destinationTimeZone: SelectOption | null;
+  handleOriginChange: (search: string) => void;
   isDeparture?: boolean;
   isTime?: boolean;
-  originAirportCode: string;
-  originTimeZone: SelectOption | null;
+  originAirport: string;
+  originOptions: Airports;
   setArrivalDate: Dispatch<SetStateAction<Date>>;
   setDepartureDate: Dispatch<SetStateAction<Date>>;
-  setDestinationAirportCode: Dispatch<SetStateAction<string>>;
-  setDestinationTimeZone: Dispatch<SetStateAction<SelectOption | null>>;
   setIsDeparture: Dispatch<SetStateAction<boolean | undefined>>;
   setIsTime: Dispatch<SetStateAction<boolean | undefined>>;
-  setOriginAirportCode: Dispatch<SetStateAction<string>>;
-  setOriginTimeZone: Dispatch<SetStateAction<SelectOption | null>>;
+  setOriginAirport: Dispatch<SetStateAction<string>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   showDatePicker: boolean;
-  setFlights: Dispatch<SetStateAction<Flights>>;
+  // setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const FlightForm: FC<FlightFormProps> = ({
   arrivalDate,
   departureDate,
-  destinationAirportCode,
-  destinationTimeZone,
+  handleOriginChange,
   isDeparture,
   isTime,
-  originAirportCode,
-  originTimeZone,
+  originAirport,
+  originOptions,
   setArrivalDate,
   setDepartureDate,
-  setDestinationAirportCode,
-  setDestinationTimeZone,
   setIsDeparture,
   setIsTime,
-  setOriginAirportCode,
-  setOriginTimeZone,
+  setOriginAirport,
   setShowDatePicker,
   showDatePicker,
-  setFlights,
+  // setFlights,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -67,13 +50,8 @@ const FlightForm: FC<FlightFormProps> = ({
 
   const handleCloseModal = () => {
     setShowModal(false);
+    handleOriginChange("");
   };
-
-  const isFormValid =
-    originAirportCode &&
-    destinationAirportCode &&
-    originTimeZone &&
-    destinationTimeZone;
 
   return (
     <View style={styles.container}>
@@ -101,48 +79,22 @@ const FlightForm: FC<FlightFormProps> = ({
             open={showDatePicker}
           />
           <View style={styles.row}>
-            <View style={styles.cell}></View>
             <Text style={styles.cell}>Origin</Text>
-            <Text style={styles.cell}>Destination</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Airport Code</Text>
-            <TextInput
-              autoCapitalize="characters"
-              onChangeText={(code) =>
-                setAirportCode(code, setOriginAirportCode)
-              }
-              placeholder="Origin airport code"
-              placeholderTextColor={"#0000"}
-              style={[styles.cell, styles.input]}
-              value={originAirportCode}
-            />
-            <TextInput
-              autoCapitalize="characters"
-              onChangeText={(code) =>
-                setAirportCode(code, setDestinationAirportCode)
-              }
-              placeholder="Destination airport code"
-              placeholderTextColor={"#0000"}
-              style={[styles.cell, styles.input]}
-              value={destinationAirportCode}
-            />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.cell}>Time Zone</Text>
-            <Select
-              style={[styles.cell, styles.input]}
-              onChange={setOriginTimeZone}
-              options={timeZones}
-              title="Select Origin Time Zone"
-              value={originTimeZone}
-            />
-            <Select
-              style={[styles.cell, styles.input]}
-              onChange={setDestinationTimeZone}
-              options={timeZones}
-              title="Select Destination Time Zone"
-              value={destinationTimeZone}
+            <Autocomplete
+              handleInputChange={handleOriginChange}
+              onSelect={(item) => {
+                setOriginAirport(item.id);
+              }}
+              options={originOptions.map((option) => ({
+                id: option.iata?.trim() || option.icao,
+                title: option.name,
+                subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+              }))}
+              RenderItem={AirportOption}
+              style={[styles.fullWidth, styles.input]}
+              value={originAirport}
             />
           </View>
           <View style={styles.row}>
@@ -201,7 +153,7 @@ const FlightForm: FC<FlightFormProps> = ({
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.row}>
+          {/* <View style={styles.row}>
             <TouchableOpacity
               disabled={!isFormValid}
               onPress={() =>
@@ -222,7 +174,7 @@ const FlightForm: FC<FlightFormProps> = ({
             >
               <Text>Add Flight</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </Modal>
     </View>
@@ -251,13 +203,24 @@ const styles = StyleSheet.create({
     maxHeight: "75%",
   },
   row: {
+    alignSelf: "stretch",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 10,
+    width: "100%",
   },
   cell: {
     height: 40,
     width: 100,
+    textAlign: "center",
+    textAlignVertical: "center",
+    marginHorizontal: 5,
+  },
+  fullWidth: {
+    alignSelf: "stretch",
+    height: 40,
+    minWidth: "100%",
     textAlign: "center",
     textAlignVertical: "center",
     marginHorizontal: 5,
