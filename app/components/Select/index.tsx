@@ -1,5 +1,5 @@
 import { SelectOption, SelectOptions } from "@/models/SelectOption";
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -18,7 +18,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-interface SelectProps extends React.ComponentProps<typeof TouchableOpacity> {
+interface SelectProps extends ComponentProps<typeof TouchableOpacity> {
   onChange?: (option: SelectOption) => void;
   options: SelectOptions;
   title?: string;
