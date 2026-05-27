@@ -21,7 +21,7 @@ async function seedDatabase() {
       city VARCHAR(255) NOT NULL,
       state VARCHAR(255),
       country VARCHAR(255) NOT NULL,
-      elevation SMALLINT,
+      elevation SMALLINT NOT NULL,
       lat DOUBLE PRECISION NOT NULL,
       lon DOUBLE PRECISION NOT NULL,
       tz VARCHAR(255)
