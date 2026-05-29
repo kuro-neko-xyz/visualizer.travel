@@ -10,6 +10,9 @@ import AirportOption from "../AirportOption";
 interface FlightFormProps {
   arrivalDate: Date;
   departureDate: Date;
+  destinationAirport: string;
+  destinationOptions: Airports;
+  handleDestinationChange: (search: string) => void;
   handleOriginChange: (search: string) => void;
   isDeparture?: boolean;
   isTime?: boolean;
@@ -19,6 +22,7 @@ interface FlightFormProps {
   setDepartureDate: Dispatch<SetStateAction<Date>>;
   setIsDeparture: Dispatch<SetStateAction<boolean | undefined>>;
   setIsTime: Dispatch<SetStateAction<boolean | undefined>>;
+  setDestinationAirport: Dispatch<SetStateAction<string>>;
   setOriginAirport: Dispatch<SetStateAction<string>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   showDatePicker: boolean;
@@ -28,6 +32,9 @@ interface FlightFormProps {
 const FlightForm: FC<FlightFormProps> = ({
   arrivalDate,
   departureDate,
+  destinationAirport,
+  destinationOptions,
+  handleDestinationChange,
   handleOriginChange,
   isDeparture,
   isTime,
@@ -37,6 +44,7 @@ const FlightForm: FC<FlightFormProps> = ({
   setDepartureDate,
   setIsDeparture,
   setIsTime,
+  setDestinationAirport,
   setOriginAirport,
   setShowDatePicker,
   showDatePicker,
@@ -51,6 +59,7 @@ const FlightForm: FC<FlightFormProps> = ({
   const handleCloseModal = () => {
     setShowModal(false);
     handleOriginChange("");
+    handleDestinationChange("");
   };
 
   return (
@@ -79,7 +88,7 @@ const FlightForm: FC<FlightFormProps> = ({
             open={showDatePicker}
           />
           <View style={styles.row}>
-            <Text style={styles.cell}>Origin</Text>
+            <Text style={styles.label}>Origin</Text>
           </View>
           <View style={styles.row}>
             <Autocomplete
@@ -97,6 +106,29 @@ const FlightForm: FC<FlightFormProps> = ({
               value={originAirport}
             />
           </View>
+          {originAirport && (
+            <>
+              <View style={styles.row}>
+                <Text style={styles.label}>Destination</Text>
+              </View>
+              <View style={styles.row}>
+                <Autocomplete
+                  handleInputChange={handleDestinationChange}
+                  onSelect={(item) => {
+                    setDestinationAirport(item.id);
+                  }}
+                  options={destinationOptions.map((option) => ({
+                    id: option.iata?.trim() || option.icao,
+                    title: option.name,
+                    subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                  }))}
+                  RenderItem={AirportOption}
+                  style={[styles.fullWidth, styles.input]}
+                  value={destinationAirport}
+                />
+              </View>
+            </>
+          )}
           <View style={styles.row}>
             <Text style={styles.cell}>Date (Dep./Arr.)</Text>
             <TouchableOpacity
@@ -221,6 +253,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     height: 40,
     minWidth: "100%",
+    maxWidth: "100%",
     textAlign: "center",
     textAlignVertical: "center",
     marginHorizontal: 5,
@@ -231,6 +264,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+  },
+  label: {
+    width: 100,
+    textAlign: "center",
+    textAlignVertical: "center",
+    marginHorizontal: 5,
+    marginTop: 10,
   },
   button: {
     borderRadius: 5,
