@@ -1,24 +1,29 @@
-const Fastify = require("fastify");
-const { user } = require("pg/lib/defaults");
-require("dotenv").config();
+import Fastify from "fastify";
+import dotenv from "dotenv";
+import postgres from "@fastify/postgres";
+import { AirportsRequestParams } from "./models/AirportsRequest.js";
+
+dotenv.config();
 
 const fastify = Fastify({
   logger: true,
 });
 
-fastify.register(require("@fastify/postgres"), {
+fastify.register(postgres, {
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
   password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT,
+  port: Number(process.env.PG_PORT),
 });
 
 fastify.get("/", async (request, reply) => {
   return { hello: "world" };
 });
 
-fastify.get("/airports", async (request, reply) => {
+fastify.get<{
+  Querystring: AirportsRequestParams;
+}>("/airports", async (request, reply) => {
   const { search } = request.query;
 
   if (!search) {

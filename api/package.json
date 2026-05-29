@@ -4,11 +4,13 @@
   "description": "",
   "license": "GPL-3.0",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "server.js",
   "scripts": {
-    "populate": "node seed.js",
-    "start": "node server.js",
+    "build": "tsc",
+    "dev": "tsx watch src/server.js",
+    "populate": "tsx src/seed.js",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -16,5 +18,11 @@
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
     "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
   }
 }
