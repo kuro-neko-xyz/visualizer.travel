@@ -9,6 +9,7 @@ const FlightsView: FC = () => {
   const [flights, setFlights] = useStorage("flights", []);
 
   const [originAirport, setOriginAirport] = useState("");
+  const [destinationAirport, setDestinationAirport] = useState("");
 
   const [departureDate, setDepartureDate] = useState<Date>(new Date());
   const [arrivalDate, setArrivalDate] = useState<Date>(new Date());
@@ -18,10 +19,12 @@ const FlightsView: FC = () => {
   const [isTime, setIsTime] = useState<boolean>();
 
   const [originOptions, setOriginOptions] = useState<Airports>([]);
+  const [destinationOptions, setDestinationOptions] = useState<Airports>([]);
 
   const handleOriginChange = async (search: string) => {
     if (!search) {
       setOriginOptions([]);
+      setOriginAirport("");
     }
 
     const response = await fetch(
@@ -33,12 +36,30 @@ const FlightsView: FC = () => {
     setOriginOptions(data);
   };
 
+  const handleDestinationChange = async (search: string) => {
+    if (!search) {
+      setDestinationOptions([]);
+      setDestinationAirport("");
+    }
+
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}airports?search=${search}`,
+    );
+
+    const data = await response.json();
+
+    setDestinationOptions(data);
+  };
+
   return (
     <ContainerTab>
       <FlightsContainer flights={flights} setFlights={setFlights} />
       <FlightForm
         arrivalDate={arrivalDate}
         departureDate={departureDate}
+        destinationAirport={destinationAirport}
+        destinationOptions={destinationOptions}
+        handleDestinationChange={handleDestinationChange}
         handleOriginChange={handleOriginChange}
         isDeparture={isDeparture}
         isTime={isTime}
@@ -48,6 +69,7 @@ const FlightsView: FC = () => {
         setDepartureDate={setDepartureDate}
         setIsDeparture={setIsDeparture}
         setIsTime={setIsTime}
+        setDestinationAirport={setDestinationAirport}
         setOriginAirport={setOriginAirport}
         setShowDatePicker={setShowDatePicker}
         showDatePicker={showDatePicker}
