@@ -17,10 +17,6 @@ fastify.register(postgres, {
   port: Number(process.env.PG_PORT),
 });
 
-fastify.get("/", async (request, reply) => {
-  return { hello: "world" };
-});
-
 fastify.get<{
   Querystring: AirportsRequestParams;
 }>("/airports", async (request, reply) => {
@@ -57,6 +53,30 @@ fastify.get<{
   client.release();
 
   return rows;
+});
+
+fastify.post("/auth/register-ios", async (request, reply) => {
+  const { publicKey } = request.body as { publicKey: string };
+
+  const newUser = {
+    id: crypto.randomUUID(),
+    publicKey,
+    createdAt: new Date(),
+  };
+
+  const client = await fastify.pg.connect();
+
+  await client.query(
+    `
+    INSERT INTO users (id, public_key, created_at)
+    VALUES ($1, $2, $3)
+  `,
+    [newUser.id, newUser.publicKey, newUser.createdAt],
+  );
+
+  client.release();
+
+  return reply.status(201).send(newUser);
 });
 
 const start = async () => {
