@@ -92,6 +92,7 @@ const FlightForm: FC<FlightFormProps> = ({
           </View>
           <View style={styles.row}>
             <Autocomplete
+              autoCapitalize="characters"
               handleInputChange={handleOriginChange}
               onSelect={(item) => {
                 setOriginAirport(item.id);
@@ -113,6 +114,7 @@ const FlightForm: FC<FlightFormProps> = ({
               </View>
               <View style={styles.row}>
                 <Autocomplete
+                  autoCapitalize="characters"
                   handleInputChange={handleDestinationChange}
                   onSelect={(item) => {
                     setDestinationAirport(item.id);
