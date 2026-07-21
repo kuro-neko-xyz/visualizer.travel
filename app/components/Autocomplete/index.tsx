@@ -23,6 +23,7 @@ export interface RenderItemProps {
 }
 
 const Autocomplete: FC<AutocompleteProps> = ({
+  autoCapitalize,
   handleInputChange,
   onSelect,
   options,
@@ -41,6 +42,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
     <View {...props}>
       {inputMode ? (
         <TextInput
+          autoCapitalize={autoCapitalize}
           autoFocus={true}
           onChange={(e) => handleInputChange(e.nativeEvent.text)}
           style={style}
