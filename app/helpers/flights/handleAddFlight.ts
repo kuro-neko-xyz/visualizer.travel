@@ -29,34 +29,30 @@ const handleAddFlight = ({
   const departureDay = String(departureDate.getDate()).padStart(2, "0");
   const departureHours = String(departureDate.getHours()).padStart(2, "0");
   const departureMinutes = String(departureDate.getMinutes()).padStart(2, "0");
-  const originOffset = timeZones
-    .find(
-      (tz) => originTimeZone === tz.name || tz.group.includes(originTimeZone),
-    )
-    ?.currentTimeFormat.substring(0, 6);
+  const originExtendedTimeZone = timeZones.find(
+    (tz) => originTimeZone === tz.name || tz.group.includes(originTimeZone),
+  );
 
   const arrivalYear = arrivalDate.getFullYear();
   const arrivalMonth = String(arrivalDate.getMonth() + 1).padStart(2, "0");
   const arrivalDay = String(arrivalDate.getDate()).padStart(2, "0");
   const arrivalHours = String(arrivalDate.getHours()).padStart(2, "0");
   const arrivalMinutes = String(arrivalDate.getMinutes()).padStart(2, "0");
-  const destinationOffset = timeZones
-    .find(
-      (tz) =>
-        destinationTimeZone === tz.name ||
-        tz.group.includes(destinationTimeZone),
-    )
-    ?.currentTimeFormat.substring(0, 6);
-
+  const destinationExtendedTimeZone = timeZones.find(
+    (tz) =>
+      destinationTimeZone === tz.name || tz.group.includes(destinationTimeZone),
+  );
   const flightData: Flight = {
     id: randomUUID(),
     origin: {
       airportCode: originAirport,
-      dateTime: `${departureYear}-${departureMonth}-${departureDay}T${departureHours}:${departureMinutes}:00${originOffset}`,
+      dateTime: `${departureYear}-${departureMonth}-${departureDay}T${departureHours}:${departureMinutes}:00${originExtendedTimeZone?.currentTimeFormat.substring(0, 6)}`,
+      timeZone: originExtendedTimeZone?.name || "",
     },
     destination: {
       airportCode: destinationAirport,
-      dateTime: `${arrivalYear}-${arrivalMonth}-${arrivalDay}T${arrivalHours}:${arrivalMinutes}:00${destinationOffset}`,
+      dateTime: `${arrivalYear}-${arrivalMonth}-${arrivalDay}T${arrivalHours}:${arrivalMinutes}:00${destinationExtendedTimeZone?.currentTimeFormat.substring(0, 6)}`,
+      timeZone: destinationExtendedTimeZone?.name || "",
     },
   };
   setFlights((prevFlights: Flights) => [...prevFlights, flightData]);
