@@ -25,6 +25,20 @@ interface SelectProps extends ComponentProps<typeof TouchableOpacity> {
   value?: SelectOption | null;
 }
 
+declare global {
+  interface Array<T> {
+    get(index: number): T | undefined;
+  }
+}
+
+// eslint-disable-next-line no-extend-native
+Array.prototype.get = function (index: number) {
+  if (this.length === 0) return undefined;
+
+  const circularIndex = ((index % this.length) + this.length) % this.length;
+  return this[circularIndex];
+};
+
 export default function Select({
   onChange,
   options,
@@ -139,6 +153,7 @@ export default function Select({
     <View>
       <TouchableOpacity {...props} onPress={handleOpenModal}>
         <Text>{value?.label ?? selected?.label}</Text>
+        {props.children}
       </TouchableOpacity>
       <Modal
         animationType="slide"
@@ -152,31 +167,31 @@ export default function Select({
             <GestureDetector gesture={gesture}>
               <Animated.View style={[styles.content, animatedContainer]}>
                 <Animated.Text style={[styles.value, animatedNegative4]}>
-                  {options.at(selectedIndex - 4)?.label ?? ""}
+                  {options.get(selectedIndex - 4)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedNegative3]}>
-                  {options.at(selectedIndex - 3)?.label ?? ""}
+                  {options.get(selectedIndex - 3)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedNegative2]}>
-                  {options.at(selectedIndex - 2)?.label ?? ""}
+                  {options.get(selectedIndex - 2)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedNegative1]}>
-                  {options.at(selectedIndex - 1)?.label ?? ""}
+                  {options.get(selectedIndex - 1)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedCenter]}>
                   {options[selectedIndex].label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive1]}>
-                  {options[(selectedIndex + 1) % options.length].label}
+                  {options.get(selectedIndex + 1)?.label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive2]}>
-                  {options[(selectedIndex + 2) % options.length].label}
+                  {options.get(selectedIndex + 2)?.label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive3]}>
-                  {options[(selectedIndex + 3) % options.length].label}
+                  {options.get(selectedIndex + 3)?.label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive4]}>
-                  {options[(selectedIndex + 4) % options.length].label}
+                  {options.get(selectedIndex + 4)?.label}
                 </Animated.Text>
               </Animated.View>
             </GestureDetector>
@@ -208,7 +223,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     flex: 1,
     padding: 40,
-    paddingTop: 23,
+    paddingTop: 40,
     margin: 20,
     marginTop: "auto",
     maxHeight: "50%",
