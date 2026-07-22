@@ -1,15 +1,26 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import DatePicker from "react-native-date-picker";
 import handleAddFlight from "@/helpers/flights/handleAddFlight";
 import CloseButton from "../CloseButton";
 import Autocomplete from "../Autocomplete";
 import { Airports } from "@/models/Airport";
 import AirportOption from "../AirportOption";
-import { Flights } from "@/models/Flight";
+import { Trips } from "@/models/Trip";
+import Select from "../Select";
+import { SelectOptions } from "@/models/SelectOption";
 
 interface FlightFormProps {
   arrivalDate: Date;
+  currentTrip: string;
+  currentTripName: string;
   departureDate: Date;
   destinationAirport: string;
   destinationOptions: Airports;
@@ -22,6 +33,8 @@ interface FlightFormProps {
   originOptions: Airports;
   originTimeZone: string;
   setArrivalDate: Dispatch<SetStateAction<Date>>;
+  setCurrentTrip: Dispatch<SetStateAction<string>>;
+  setCurrentTripName: Dispatch<SetStateAction<string>>;
   setDepartureDate: Dispatch<SetStateAction<Date>>;
   setIsDeparture: Dispatch<SetStateAction<boolean | undefined>>;
   setIsTime: Dispatch<SetStateAction<boolean | undefined>>;
@@ -31,11 +44,14 @@ interface FlightFormProps {
   setOriginTimeZone: Dispatch<SetStateAction<string>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   showDatePicker: boolean;
-  setFlights: Dispatch<SetStateAction<Flights>>;
+  setTrips: Dispatch<SetStateAction<Trips>>;
+  tripOptions: SelectOptions;
 }
 
 const FlightForm: FC<FlightFormProps> = ({
   arrivalDate,
+  currentTrip,
+  currentTripName,
   departureDate,
   destinationAirport,
   destinationOptions,
@@ -48,6 +64,8 @@ const FlightForm: FC<FlightFormProps> = ({
   originOptions,
   originTimeZone,
   setArrivalDate,
+  setCurrentTrip,
+  setCurrentTripName,
   setDepartureDate,
   setIsDeparture,
   setIsTime,
@@ -57,7 +75,8 @@ const FlightForm: FC<FlightFormProps> = ({
   setOriginTimeZone,
   setShowDatePicker,
   showDatePicker,
-  setFlights,
+  setTrips,
+  tripOptions,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -69,6 +88,7 @@ const FlightForm: FC<FlightFormProps> = ({
     setShowModal(false);
     handleOriginChange("");
     handleDestinationChange("");
+    setCurrentTripName("");
   };
 
   const isFormValid =
@@ -78,6 +98,14 @@ const FlightForm: FC<FlightFormProps> = ({
     destinationTimeZone &&
     departureDate &&
     arrivalDate;
+
+  const options = [
+    {
+      label: "New Trip",
+      value: "",
+    },
+    ...tripOptions,
+  ];
 
   return (
     <View style={styles.container}>
@@ -104,6 +132,33 @@ const FlightForm: FC<FlightFormProps> = ({
             }}
             open={showDatePicker}
           />
+          <View style={styles.row}>
+            <Select
+              onChange={(option) => setCurrentTrip(option.value)}
+              options={options}
+              value={options.find((trip) => trip.value === currentTrip)}
+              style={styles.select}
+            >
+              <Text style={styles.hint}>▼</Text>
+            </Select>
+          </View>
+          {!currentTrip && (
+            <>
+              <View style={styles.row}>
+                <Text style={styles.label}>Trip Name</Text>
+              </View>
+              <View style={styles.row}>
+                <TextInput
+                  autoCapitalize="words"
+                  onChange={(event) =>
+                    setCurrentTripName(event.nativeEvent.text)
+                  }
+                  style={[styles.fullWidth, styles.input]}
+                  value={currentTripName}
+                />
+              </View>
+            </>
+          )}
           <View style={styles.row}>
             <Text style={styles.label}>Origin</Text>
           </View>
@@ -218,12 +273,14 @@ const FlightForm: FC<FlightFormProps> = ({
               onPress={() => {
                 handleAddFlight({
                   arrivalDate,
+                  currentTrip,
+                  currentTripName,
                   departureDate,
                   destinationAirport,
                   destinationTimeZone,
                   originAirport,
                   originTimeZone,
-                  setFlights,
+                  setTrips,
                 });
                 handleCloseModal();
               }}
@@ -260,7 +317,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 40,
     marginTop: "auto",
-    maxHeight: "75%",
+    maxHeight: "95%",
   },
   row: {
     alignSelf: "stretch",
@@ -311,5 +368,19 @@ const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: "#CCCCCC",
+  },
+  select: {
+    borderStyle: "solid",
+    borderWidth: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 25,
+    borderRadius: 5,
+  },
+  hint: {
+    position: "absolute",
+    right: 2,
+    top: 5,
   },
 });
