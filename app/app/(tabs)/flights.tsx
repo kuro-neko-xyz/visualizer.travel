@@ -4,9 +4,10 @@ import FlightForm from "@/components/FlightForm";
 import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
 import { Airports } from "@/models/Airport";
+import { Trip } from "@/models/Trip";
 
 const FlightsView: FC = () => {
-  const [flights, setFlights] = useStorage("flights", []);
+  const [trips, setTrips] = useStorage("trips", []);
 
   const [originAirport, setOriginAirport] = useState("");
   const [destinationAirport, setDestinationAirport] = useState("");
@@ -23,6 +24,9 @@ const FlightsView: FC = () => {
 
   const [originOptions, setOriginOptions] = useState<Airports>([]);
   const [destinationOptions, setDestinationOptions] = useState<Airports>([]);
+
+  const [currentTrip, setCurrentTrip] = useState("");
+  const [currentTripName, setCurrentTripName] = useState("");
 
   const handleOriginChange = async (search: string) => {
     if (!search) {
@@ -56,9 +60,11 @@ const FlightsView: FC = () => {
 
   return (
     <ContainerTab>
-      <FlightsContainer flights={flights} setFlights={setFlights} />
+      <FlightsContainer trips={trips} setTrips={setTrips} />
       <FlightForm
         arrivalDate={arrivalDate}
+        currentTrip={currentTrip}
+        currentTripName={currentTripName}
         departureDate={departureDate}
         destinationAirport={destinationAirport}
         destinationOptions={destinationOptions}
@@ -71,16 +77,22 @@ const FlightsView: FC = () => {
         originOptions={originOptions}
         originTimeZone={originTimeZone}
         setArrivalDate={setArrivalDate}
+        setCurrentTrip={setCurrentTrip}
+        setCurrentTripName={setCurrentTripName}
         setDepartureDate={setDepartureDate}
         setDestinationAirport={setDestinationAirport}
         setDestinationTimeZone={setDestinationTimeZone}
-        setFlights={setFlights}
         setIsDeparture={setIsDeparture}
         setIsTime={setIsTime}
         setOriginAirport={setOriginAirport}
         setOriginTimeZone={setOriginTimeZone}
         setShowDatePicker={setShowDatePicker}
+        setTrips={setTrips}
         showDatePicker={showDatePicker}
+        tripOptions={trips.map((trip: Trip) => ({
+          label: trip.name,
+          value: trip.uuid,
+        }))}
       />
     </ContainerTab>
   );
