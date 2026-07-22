@@ -1,15 +1,16 @@
 import handleDeleteFlight from "@/helpers/flights/handleDeleteFlight";
-import { Flight, Flights } from "@/models/Flight";
+import { Flight } from "@/models/Flight";
 import { Dispatch, FC, SetStateAction } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CloseButton from "../CloseButton";
+import { Trips } from "@/models/Trip";
 
 interface FlightInfoProps {
   flight: Flight;
-  setFlights: Dispatch<SetStateAction<Flights>>;
+  setTrips: Dispatch<SetStateAction<Trips>>;
 }
 
-const FlightInfo: FC<FlightInfoProps> = ({ flight, setFlights }) => {
+const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips }) => {
   return (
     <View style={styles.container}>
       <View style={styles.info}>
@@ -41,7 +42,7 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, setFlights }) => {
       </View>
       <CloseButton
         handleCloseModal={() =>
-          handleDeleteFlight({ flightId: flight.id, setFlights })
+          handleDeleteFlight({ flightId: flight.id, setTrips })
         }
       />
     </View>

@@ -1,26 +1,31 @@
-import { Flight, Flights } from "@/models/Flight";
+import { Flight } from "@/models/Flight";
 import { randomUUID } from "expo-crypto";
 import { Dispatch, SetStateAction } from "react";
 import { getTimeZones } from "@vvo/tzdb";
+import { Trips } from "@/models/Trip";
 
 interface HandleAddFlightParams {
   arrivalDate: Date;
+  currentTrip: string;
+  currentTripName: string;
   departureDate: Date;
   destinationAirport: string;
   destinationTimeZone: string;
   originAirport: string;
   originTimeZone: string;
-  setFlights: Dispatch<SetStateAction<Flights>>;
+  setTrips: Dispatch<SetStateAction<Trips>>;
 }
 
 const handleAddFlight = ({
   arrivalDate,
+  currentTrip,
+  currentTripName,
   departureDate,
   destinationAirport,
   destinationTimeZone,
   originAirport,
   originTimeZone,
-  setFlights,
+  setTrips,
 }: HandleAddFlightParams) => {
   const timeZones = getTimeZones();
 
@@ -55,7 +60,24 @@ const handleAddFlight = ({
       timeZone: destinationExtendedTimeZone?.name || "",
     },
   };
-  setFlights((prevFlights: Flights) => [...prevFlights, flightData]);
+  if (currentTrip === "") {
+    setTrips((prevTrips: Trips) => [
+      ...prevTrips,
+      {
+        uuid: randomUUID(),
+        name: currentTripName,
+        flights: [flightData],
+      },
+    ]);
+  } else {
+    setTrips((prevTrips: Trips) => {
+      const trip = prevTrips.find((trip) => trip.uuid === currentTrip);
+      if (trip) {
+        trip.flights = [...trip.flights, flightData];
+      }
+      return prevTrips;
+    });
+  }
 };
 
 export default handleAddFlight;
