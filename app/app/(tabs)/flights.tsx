@@ -11,6 +11,9 @@ const FlightsView: FC = () => {
   const [originAirport, setOriginAirport] = useState("");
   const [destinationAirport, setDestinationAirport] = useState("");
 
+  const [originTimeZone, setOriginTimeZone] = useState("");
+  const [destinationTimeZone, setDestinationTimeZone] = useState("");
+
   const [departureDate, setDepartureDate] = useState<Date>(new Date());
   const [arrivalDate, setArrivalDate] = useState<Date>(new Date());
 
@@ -59,18 +62,23 @@ const FlightsView: FC = () => {
         departureDate={departureDate}
         destinationAirport={destinationAirport}
         destinationOptions={destinationOptions}
+        destinationTimeZone={destinationTimeZone}
         handleDestinationChange={handleDestinationChange}
         handleOriginChange={handleOriginChange}
         isDeparture={isDeparture}
         isTime={isTime}
         originAirport={originAirport}
         originOptions={originOptions}
+        originTimeZone={originTimeZone}
         setArrivalDate={setArrivalDate}
         setDepartureDate={setDepartureDate}
+        setDestinationAirport={setDestinationAirport}
+        setDestinationTimeZone={setDestinationTimeZone}
+        setFlights={setFlights}
         setIsDeparture={setIsDeparture}
         setIsTime={setIsTime}
-        setDestinationAirport={setDestinationAirport}
         setOriginAirport={setOriginAirport}
+        setOriginTimeZone={setOriginTimeZone}
         setShowDatePicker={setShowDatePicker}
         showDatePicker={showDatePicker}
       />

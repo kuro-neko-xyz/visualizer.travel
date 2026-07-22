@@ -1,32 +1,37 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
-// import handleAddFlight from "@/helpers/flights/handleAddFlight";
+import handleAddFlight from "@/helpers/flights/handleAddFlight";
 import CloseButton from "../CloseButton";
 import Autocomplete from "../Autocomplete";
 import { Airports } from "@/models/Airport";
 import AirportOption from "../AirportOption";
+import { Flights } from "@/models/Flight";
 
 interface FlightFormProps {
   arrivalDate: Date;
   departureDate: Date;
   destinationAirport: string;
   destinationOptions: Airports;
+  destinationTimeZone: string;
   handleDestinationChange: (search: string) => void;
   handleOriginChange: (search: string) => void;
   isDeparture?: boolean;
   isTime?: boolean;
   originAirport: string;
   originOptions: Airports;
+  originTimeZone: string;
   setArrivalDate: Dispatch<SetStateAction<Date>>;
   setDepartureDate: Dispatch<SetStateAction<Date>>;
   setIsDeparture: Dispatch<SetStateAction<boolean | undefined>>;
   setIsTime: Dispatch<SetStateAction<boolean | undefined>>;
   setDestinationAirport: Dispatch<SetStateAction<string>>;
+  setDestinationTimeZone: Dispatch<SetStateAction<string>>;
   setOriginAirport: Dispatch<SetStateAction<string>>;
+  setOriginTimeZone: Dispatch<SetStateAction<string>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
   showDatePicker: boolean;
-  // setFlights: Dispatch<SetStateAction<Flights>>;
+  setFlights: Dispatch<SetStateAction<Flights>>;
 }
 
 const FlightForm: FC<FlightFormProps> = ({
@@ -34,21 +39,25 @@ const FlightForm: FC<FlightFormProps> = ({
   departureDate,
   destinationAirport,
   destinationOptions,
+  destinationTimeZone,
   handleDestinationChange,
   handleOriginChange,
   isDeparture,
   isTime,
   originAirport,
   originOptions,
+  originTimeZone,
   setArrivalDate,
   setDepartureDate,
   setIsDeparture,
   setIsTime,
   setDestinationAirport,
+  setDestinationTimeZone,
   setOriginAirport,
+  setOriginTimeZone,
   setShowDatePicker,
   showDatePicker,
-  // setFlights,
+  setFlights,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -61,6 +70,14 @@ const FlightForm: FC<FlightFormProps> = ({
     handleOriginChange("");
     handleDestinationChange("");
   };
+
+  const isFormValid =
+    originAirport &&
+    originTimeZone &&
+    destinationAirport &&
+    destinationTimeZone &&
+    departureDate &&
+    arrivalDate;
 
   return (
     <View style={styles.container}>
@@ -96,11 +113,15 @@ const FlightForm: FC<FlightFormProps> = ({
               handleInputChange={handleOriginChange}
               onSelect={(item) => {
                 setOriginAirport(item.id);
+                setOriginTimeZone(item.meta.tz);
               }}
               options={originOptions.map((option) => ({
                 id: option.iata?.trim() || option.icao,
                 title: option.name,
                 subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                meta: {
+                  tz: option.tz,
+                },
               }))}
               RenderItem={AirportOption}
               style={[styles.fullWidth, styles.input]}
@@ -118,11 +139,15 @@ const FlightForm: FC<FlightFormProps> = ({
                   handleInputChange={handleDestinationChange}
                   onSelect={(item) => {
                     setDestinationAirport(item.id);
+                    setDestinationTimeZone(item.meta.tz);
                   }}
                   options={destinationOptions.map((option) => ({
                     id: option.iata?.trim() || option.icao,
                     title: option.name,
                     subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                    meta: {
+                      tz: option.tz,
+                    },
                   }))}
                   RenderItem={AirportOption}
                   style={[styles.fullWidth, styles.input]}
@@ -187,20 +212,21 @@ const FlightForm: FC<FlightFormProps> = ({
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.row}>
+          <View style={styles.row}>
             <TouchableOpacity
               disabled={!isFormValid}
-              onPress={() =>
+              onPress={() => {
                 handleAddFlight({
                   arrivalDate,
                   departureDate,
-                  destinationAirportCode,
+                  destinationAirport,
                   destinationTimeZone,
-                  originAirportCode,
+                  originAirport,
                   originTimeZone,
                   setFlights,
-                })
-              }
+                });
+                handleCloseModal();
+              }}
               style={[
                 styles.button,
                 isFormValid ? styles.enabled : styles.disabled,
@@ -208,7 +234,7 @@ const FlightForm: FC<FlightFormProps> = ({
             >
               <Text>Add Flight</Text>
             </TouchableOpacity>
-          </View> */}
+          </View>
         </View>
       </Modal>
     </View>
@@ -266,6 +292,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+    color: "black",
   },
   label: {
     width: 100,
