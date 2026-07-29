@@ -73,7 +73,12 @@ const handleAddFlight = ({
     setTrips((prevTrips: Trips) => {
       const trip = prevTrips.find((trip) => trip.uuid === currentTrip);
       if (trip) {
-        trip.flights = [...trip.flights, flightData];
+        trip.flights = [...trip.flights, flightData].sort((a, b) => {
+          return (
+            new Date(a.origin.dateTime).getTime() -
+            new Date(b.origin.dateTime).getTime()
+          );
+        });
       }
       return prevTrips;
     });
