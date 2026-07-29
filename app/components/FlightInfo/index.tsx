@@ -8,19 +8,23 @@ import { Trips } from "@/models/Trip";
 interface FlightInfoProps {
   flight: Flight;
   setTrips: Dispatch<SetStateAction<Trips>>;
+  timeZone: string;
 }
 
-const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips }) => {
+const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips, timeZone }) => {
   return (
     <View style={styles.container}>
       <View style={styles.info}>
         <View style={styles.details}>
           <Text style={styles.header}>{flight.origin.airportCode}</Text>
           <Text style={styles.data}>
-            {new Date(flight.origin.dateTime).toLocaleDateString()}
+            {new Date(flight.origin.dateTime).toLocaleDateString([], {
+              timeZone,
+            })}
           </Text>
           <Text style={styles.data}>
             {new Date(flight.origin.dateTime).toLocaleTimeString([], {
+              timeZone,
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -30,10 +34,13 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips }) => {
         <View style={styles.details}>
           <Text style={styles.header}>{flight.destination.airportCode}</Text>
           <Text style={styles.data}>
-            {new Date(flight.destination.dateTime).toLocaleDateString()}
+            {new Date(flight.destination.dateTime).toLocaleDateString([], {
+              timeZone,
+            })}
           </Text>
           <Text style={styles.data}>
             {new Date(flight.destination.dateTime).toLocaleTimeString([], {
+              timeZone,
               hour: "2-digit",
               minute: "2-digit",
             })}
