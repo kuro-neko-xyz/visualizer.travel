@@ -1,11 +1,14 @@
 import { PLANE_CODE } from "@/constants/lanes";
-import { Flights, ItineraryElement } from "@visualizer.travel/shared";
+import {
+  Flights,
+  ItineraryElement,
+  TimeFrame,
+} from "@visualizer.travel/shared";
 
-const transformItinerary = (
-  sortedFlights: Flights,
-  dayBefore: Date,
-  dayAfter: Date,
-) => {
+const transformItinerary = (sortedFlights: Flights, timeFrame: TimeFrame) => {
+  const dayBefore = timeFrame.getFirstDay();
+  const dayAfter = timeFrame.getLastDay();
+
   return sortedFlights.reduce<ItineraryElement[]>((acc, flight, index) => {
     if (index === 0) {
       acc.push({
