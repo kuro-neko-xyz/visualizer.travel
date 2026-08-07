@@ -1,4 +1,4 @@
-import { AutocompleteItem, AutocompleteItems } from "@/models/Autocomplete";
+import { AutocompleteItem, AutocompleteItems } from "@visualizer.travel/shared";
 import { ComponentProps, FC, useState } from "react";
 import {
   ScrollView,
