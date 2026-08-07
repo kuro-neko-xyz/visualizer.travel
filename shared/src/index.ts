@@ -1,4 +1,4 @@
-export * from "./classes/TimeFrame";
+export { default as TimeFrame } from "./classes/TimeFrame";
 
 export * from "./models/Accommodation";
 
