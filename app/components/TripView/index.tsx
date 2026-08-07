@@ -1,4 +1,4 @@
-import { Trip, Trips } from "@/models/Trip";
+import { Trip, Trips } from "@visualizer.travel/shared";
 import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Select from "../Select";

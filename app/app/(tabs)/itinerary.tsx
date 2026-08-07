@@ -3,7 +3,12 @@ import Select from "@/components/Select";
 import getTimeFrame from "@/helpers/itinerary/getTimeFrame";
 import transformItinerary from "@/helpers/itinerary/transformItinerary";
 import useStorage from "@/hooks/useStorage";
-import { Flights, SelectOptions, Trip } from "@visualizer.travel/shared";
+import {
+  Flight,
+  Flights,
+  SelectOptions,
+  Trip,
+} from "@visualizer.travel/shared";
 import { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import ItineraryContainer from "@/components/ItineraryView";
@@ -11,6 +16,9 @@ import ItineraryContainer from "@/components/ItineraryView";
 export default function ItineraryView() {
   const [trips] = useStorage("trips", []);
   const [selectedTrip, setSelectedTrip] = useState(trips[0]?.uuid);
+  const [selectedTimeZone, setSelectedTimeZone] = useState(
+    trips[0]?.flights[0].origin.timeZone,
+  );
 
   const options: SelectOptions = useMemo(() => {
     return trips.map((trip: Trip) => ({
@@ -22,6 +30,20 @@ export default function ItineraryView() {
   const flights: Flights = useMemo(() => {
     return trips.find((trip: Trip) => trip.uuid === selectedTrip).flights;
   }, [trips, selectedTrip]);
+
+  const timeZoneOptions = useMemo(() => {
+    if (!flights) return [];
+
+    const allTimeZones = flights.flatMap((flight: Flight) => [
+      flight.origin.timeZone,
+      flight.destination.timeZone,
+    ]);
+
+    return [...new Set(allTimeZones)].map((tz) => ({
+      value: tz,
+      label: tz,
+    })) as SelectOptions;
+  }, [flights]);
 
   if (!selectedTrip) {
     return (
@@ -46,6 +68,9 @@ export default function ItineraryView() {
   return (
     <ContainerTab>
       <View style={styles.row}>
+        <Text style={styles.label}>Select Trip</Text>
+      </View>
+      <View style={styles.row}>
         <Select
           onChange={(option) => setSelectedTrip(option.value)}
           options={options}
@@ -55,7 +80,26 @@ export default function ItineraryView() {
           <Text style={styles.hint}>▼</Text>
         </Select>
       </View>
-      <ItineraryContainer itinerary={itinerary} timeFrame={timeFrame} />
+      <View style={styles.row}>
+        <Text style={styles.label}>Select Time Zone to Display Data</Text>
+      </View>
+      <View style={styles.row}>
+        <Select
+          onChange={(option) => setSelectedTimeZone(option.value)}
+          options={timeZoneOptions}
+          value={timeZoneOptions.find(
+            (option) => option.value === selectedTimeZone,
+          )}
+          style={styles.select}
+        >
+          <Text style={styles.hint}>▼</Text>
+        </Select>
+      </View>
+      <ItineraryContainer
+        itinerary={itinerary}
+        timeFrame={timeFrame}
+        timeZone={selectedTimeZone}
+      />
     </ContainerTab>
   );
 }
@@ -68,6 +112,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10,
     width: "100%",
+  },
+  label: {
+    textAlign: "center",
   },
   select: {
     borderStyle: "solid",
