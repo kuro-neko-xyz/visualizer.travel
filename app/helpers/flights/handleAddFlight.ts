@@ -1,8 +1,7 @@
-import { Flight } from "@/models/Flight";
+import { Flight, Trips } from "@visualizer.travel/shared";
 import { randomUUID } from "expo-crypto";
 import { Dispatch, SetStateAction } from "react";
 import { getTimeZones } from "@vvo/tzdb";
-import { Trips } from "@/models/Trip";
 
 interface HandleAddFlightParams {
   arrivalDate: Date;

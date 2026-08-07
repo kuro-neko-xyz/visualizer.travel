@@ -1,0 +1,8 @@
+{
+  "name": "visualizer.travel",
+  "workspaces": [
+    "api",
+    "app",
+    "shared"
+  ]
+}

@@ -3,8 +3,7 @@ import { FC, useState } from "react";
 import FlightForm from "@/components/FlightForm";
 import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
-import { Airports } from "@/models/Airport";
-import { Trip } from "@/models/Trip";
+import { Airports, Trip } from "@visualizer.travel/shared";
 
 const FlightsView: FC = () => {
   const [trips, setTrips] = useStorage("trips", []);
