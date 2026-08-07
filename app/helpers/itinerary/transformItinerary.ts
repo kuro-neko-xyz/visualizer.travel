@@ -1,6 +1,5 @@
 import { PLANE_CODE } from "@/constants/lanes";
-import { Flights } from "@/models/Flight";
-import { ItineraryElement } from "@/models/Itinerary";
+import { Flights, ItineraryElement } from "@visualizer.travel/shared";
 
 const transformItinerary = (
   sortedFlights: Flights,

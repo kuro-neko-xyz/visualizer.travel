@@ -11,11 +11,9 @@ import DatePicker from "react-native-date-picker";
 import handleAddFlight from "@/helpers/flights/handleAddFlight";
 import CloseButton from "../CloseButton";
 import Autocomplete from "../Autocomplete";
-import { Airports } from "@/models/Airport";
+import { Airports, Trips, SelectOptions } from "@visualizer.travel/shared";
 import AirportOption from "../AirportOption";
-import { Trips } from "@/models/Trip";
 import Select from "../Select";
-import { SelectOptions } from "@/models/SelectOption";
 
 interface FlightFormProps {
   arrivalDate: Date;

@@ -1,8 +1,9 @@
 {
-  "name": "visualizer.travel",
+  "name": "app.visualizer.travel",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "dev": "expo start",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
@@ -15,6 +16,7 @@
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
+    "@visualizer.travel/shared": "*",
     "@vvo/tzdb": "^6.198.0",
     "expo": "~54.0.20",
     "expo-constants": "~18.0.10",

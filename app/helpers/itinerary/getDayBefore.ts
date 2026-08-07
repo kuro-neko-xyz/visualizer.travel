@@ -1,4 +1,4 @@
-import { Flights } from "@/models/Flight";
+import { Flights } from "@visualizer.travel/shared";
 
 const getDayBefore = (sortedFlights: Flights): Date | null => {
   if (sortedFlights.length === 0) {

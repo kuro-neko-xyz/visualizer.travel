@@ -1,4 +1,4 @@
-import { SelectOption, SelectOptions } from "@/models/SelectOption";
+import { SelectOption, SelectOptions } from "@visualizer.travel/shared";
 import { ComponentProps, useState } from "react";
 import {
   Modal,
