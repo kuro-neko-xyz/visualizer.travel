@@ -2,7 +2,7 @@ import handleDeleteAccommodation from "@/helpers/accommodations/handleDeleteAcco
 import { Dispatch, FC, SetStateAction } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CloseButton from "../CloseButton";
-import { Accommodation, Accommodations } from "@/models/Accommodation";
+import { Accommodation, Accommodations } from "@visualizer.travel/shared";
 
 interface AccommodationInfoProps {
   accommodation: Accommodation;

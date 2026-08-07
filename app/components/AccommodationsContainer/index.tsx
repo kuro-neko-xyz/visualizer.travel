@@ -1,4 +1,4 @@
-import { Accommodations } from "@/models/Accommodation";
+import { Accommodations } from "@visualizer.travel/shared";
 import { Dispatch, FC, SetStateAction } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import AccommodationInfo from "../AccommodationInfo";

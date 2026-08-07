@@ -1,5 +1,5 @@
 {
-  "name": "visualizer.travel",
+  "name": "api.visualizer.travel",
   "version": "1.0.0",
   "description": "",
   "license": "GPL-3.0",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@fastify/postgres": "^6.0.2",
+    "@visualizer.travel/shared": "*",
     "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
     "pg": "^8.20.0"

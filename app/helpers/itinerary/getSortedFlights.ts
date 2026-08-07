@@ -1,4 +1,4 @@
-import { Flights } from "@/models/Flight";
+import { Flights } from "@visualizer.travel/shared";
 
 const getSortedFlights = (flights: Flights): Flights => {
   return flights.sort((a, b) => {

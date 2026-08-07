@@ -2,7 +2,7 @@ import AccommodationForm from "@/components/AccommodationForm";
 import AccommodationsContainer from "@/components/AccommodationsContainer";
 import ContainerTab from "@/components/ContainerTab";
 import useStorage from "@/hooks/useStorage";
-import { SelectOption } from "@/models/SelectOption";
+import { SelectOption } from "@visualizer.travel/shared";
 import { useState } from "react";
 
 export default function AccommodationsView() {
