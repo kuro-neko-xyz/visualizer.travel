@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Trips } from "@visualizer.travel/shared";
 import TripView from "../TripView";
 
@@ -10,11 +10,13 @@ interface FlightsContainerProps {
 
 const FlightsContainer: FC<FlightsContainerProps> = ({ trips, setTrips }) => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {trips.map((trip) => (
-        <TripView key={trip.uuid} setTrips={setTrips} trip={trip} />
-      ))}
-    </ScrollView>
+    <View style={styles.content}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {trips.map((trip) => (
+          <TripView key={trip.uuid} setTrips={setTrips} trip={trip} />
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -22,12 +24,19 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
     alignContent: "center",
     minHeight: "100%",
+    minWidth: "100%",
+    maxWidth: "100%",
+    paddingBottom: 100,
+  },
+  content: {
+    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
+    minWidth: "100%",
   },
 });
 

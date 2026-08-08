@@ -307,6 +307,8 @@ const styles = StyleSheet.create({
   addButton: {
     padding: 10,
     margin: 10,
+    marginBottom: 50,
+    position: "absolute",
   },
   content: {
     alignItems: "center",
