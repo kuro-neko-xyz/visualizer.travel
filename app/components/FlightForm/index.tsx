@@ -96,7 +96,8 @@ const FlightForm: FC<FlightFormProps> = ({
     destinationAirport &&
     destinationTimeZone &&
     departureDate &&
-    arrivalDate;
+    arrivalDate &&
+    arrivalDate >= departureDate;
 
   const options = [
     {
@@ -124,6 +125,9 @@ const FlightForm: FC<FlightFormProps> = ({
             onConfirm={(date) => {
               if (isDeparture) {
                 setDepartureDate(date);
+                if (arrivalDate < date) {
+                  setArrivalDate(date);
+                }
               } else {
                 setArrivalDate(date);
               }
