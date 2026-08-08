@@ -62,9 +62,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "black",
     borderWidth: 1,
-    width: 150,
+    width: "90%",
     height: 100,
     margin: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   info: {
     flex: 1,
