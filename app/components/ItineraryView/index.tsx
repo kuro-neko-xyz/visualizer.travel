@@ -1,4 +1,3 @@
-import { PLANE_CODE } from "@/constants/lanes";
 import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
 import { ItineraryElement, TimeFrame } from "@visualizer.travel/shared";
 import { FC } from "react";
