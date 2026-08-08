@@ -87,6 +87,7 @@ const FlightForm: FC<FlightFormProps> = ({
     handleOriginChange("");
     handleDestinationChange("");
     setCurrentTripName("");
+    setCurrentTrip("");
   };
 
   const isFormValid =
