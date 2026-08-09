@@ -1,5 +1,6 @@
 import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
 import { ItineraryElement, TimeFrame } from "@visualizer.travel/shared";
+import { getTimeZones } from "@vvo/tzdb";
 import { FC } from "react";
 import {
   ScrollView,
@@ -10,6 +11,7 @@ import {
 } from "react-native";
 
 interface ItineraryViewProps {
+  initialTimeZone: string;
   itinerary: ItineraryElement[];
   timeFrame: TimeFrame;
   timeZone: string;
@@ -18,31 +20,58 @@ interface ItineraryViewProps {
 const DAY_HEIGHT = 240;
 
 const ItineraryView: FC<ItineraryViewProps> = ({
+  initialTimeZone,
   itinerary,
   timeFrame,
   timeZone,
 }) => {
   const { height } = useWindowDimensions();
 
+  const timeZones = getTimeZones();
+
+  const extendedInitialTimeZone = timeZones.find(
+    (tz) => initialTimeZone === tz.name || tz.group.includes(initialTimeZone),
+  );
+
+  const extendedTimeZone = timeZones.find(
+    (tz) => timeZone === tz.name || tz.group.includes(timeZone),
+  );
+
+  const difference =
+    (extendedTimeZone?.currentTimeOffsetInMinutes ?? 0) -
+    (extendedInitialTimeZone?.currentTimeOffsetInMinutes ?? 0);
+
+  const padding = -Math.floor(difference / 1440);
+
+  const displacement = (difference * DAY_HEIGHT) / 1440 + padding * DAY_HEIGHT;
+
   return (
     <View style={[styles.container, { minHeight: height - 302 }]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.itineraryContainer}>
-          {itinerary.map((element) => (
-            <View
-              key={JSON.stringify(element)}
-              style={{
-                backgroundColor: generateRandomColorFromCode(element.location),
-                height:
-                  ((element.endDate.getTime() - element.startDate.getTime()) *
-                    DAY_HEIGHT) /
-                  86400000,
-                width: 40,
-              }}
-            >
-              <Text style={styles.locationLabel}>{element.location}</Text>
-            </View>
-          ))}
+        <View style={[styles.itineraryContainer, { marginTop: displacement }]}>
+          {itinerary.map((element) => {
+            const height =
+              ((element.endDate.getTime() - element.startDate.getTime()) *
+                DAY_HEIGHT) /
+              86400000;
+
+            return (
+              <View
+                key={JSON.stringify(element)}
+                style={{
+                  backgroundColor: generateRandomColorFromCode(
+                    element.location,
+                  ),
+                  minHeight: height,
+                  maxHeight: height,
+                  overflowY: "hidden",
+                  width: 40,
+                }}
+              >
+                <Text style={styles.locationLabel}>{element.location}</Text>
+              </View>
+            );
+          })}
         </View>
         <View>
           {[...timeFrame].map((timeFrameElement) => {
