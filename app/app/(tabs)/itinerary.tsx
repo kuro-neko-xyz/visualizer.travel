@@ -14,12 +14,12 @@ import ItineraryContainer from "@/components/ItineraryView";
 import { TripContext } from "./_layout";
 
 export default function ItineraryView() {
-  const { trips } = useContext(TripContext);
+  const { trips: traps } = useContext(TripContext);
+
+  const trips = traps.reverse();
 
   const [selectedTrip, setSelectedTrip] = useState(trips[0]?.uuid);
-  const [selectedTimeZone, setSelectedTimeZone] = useState(
-    trips[0]?.flights[0].origin.timeZone,
-  );
+  const [initialTimeZone] = useState(trips[0]?.flights?.[0].origin.timeZone);
 
   const options: SelectOptions = useMemo(() => {
     return trips.map((trip: Trip) => ({
@@ -47,6 +47,10 @@ export default function ItineraryView() {
       label: tz,
     })) as SelectOptions;
   }, [flights]);
+
+  const [selectedTimeZone, setSelectedTimeZone] = useState(
+    timeZoneOptions[0].value,
+  );
 
   if (!selectedTrip) {
     return (
@@ -100,6 +104,7 @@ export default function ItineraryView() {
           </Select>
         </View>
         <ItineraryContainer
+          initialTimeZone={initialTimeZone}
           itinerary={itinerary}
           timeFrame={timeFrame}
           timeZone={selectedTimeZone}

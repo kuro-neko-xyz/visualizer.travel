@@ -10,6 +10,7 @@ const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {
   }
 
   const firstDeparture = parseDateString({
+    addOffset: true,
     dummyDate: new Date(firstFlight.origin.dateTime),
     timeZone: firstFlight.origin.timeZone,
     overrideHours: 0,
@@ -19,6 +20,7 @@ const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {
   const firstDay = new Date(firstDeparture.dateString);
 
   const lastArrival = parseDateString({
+    addOffset: true,
     dummyDate: new Date(lastFlight.destination.dateTime),
     timeZone: lastFlight.destination.timeZone,
     overrideHours: 23,
