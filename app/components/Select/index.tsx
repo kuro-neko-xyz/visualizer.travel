@@ -179,7 +179,7 @@ export default function Select({
                   {options.get(selectedIndex - 1)?.label ?? ""}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedCenter]}>
-                  {options[selectedIndex].label}
+                  {options[selectedIndex]?.label}
                 </Animated.Text>
                 <Animated.Text style={[styles.value, animatedPositive1]}>
                   {options.get(selectedIndex + 1)?.label}

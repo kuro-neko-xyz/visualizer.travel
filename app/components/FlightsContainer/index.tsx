@@ -10,8 +10,8 @@ interface FlightsContainerProps {
 
 const FlightsContainer: FC<FlightsContainerProps> = ({ trips, setTrips }) => {
   return (
-    <View style={styles.content}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content}>
         {trips.map((trip) => (
           <TripView key={trip.uuid} setTrips={setTrips} trip={trip} />
         ))}
@@ -22,6 +22,10 @@ const FlightsContainer: FC<FlightsContainerProps> = ({ trips, setTrips }) => {
 
 const styles = StyleSheet.create({
   container: {
+    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
+    minWidth: "100%",
+  },
+  content: {
     padding: 20,
     display: "flex",
     flexDirection: "column",
@@ -33,10 +37,6 @@ const styles = StyleSheet.create({
     minWidth: "100%",
     maxWidth: "100%",
     paddingBottom: 100,
-  },
-  content: {
-    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
-    minWidth: "100%",
   },
 });
 
