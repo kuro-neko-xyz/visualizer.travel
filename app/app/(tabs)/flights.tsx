@@ -1,12 +1,12 @@
-import useStorage from "@/hooks/useStorage";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import FlightForm from "@/components/FlightForm";
 import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
 import { Airports, Trip } from "@visualizer.travel/shared";
+import { TripContext } from "./_layout";
 
 const FlightsView: FC = () => {
-  const [trips, setTrips] = useStorage("trips", []);
+  const { trips, setTrips } = useContext(TripContext);
 
   const [originAirport, setOriginAirport] = useState("");
   const [destinationAirport, setDestinationAirport] = useState("");
