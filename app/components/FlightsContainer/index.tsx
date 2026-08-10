@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
   container: {
     boxShadow: "0px -50px 50px -50px #AAAAAA inset",
     minWidth: "100%",
+    maxWidth: "100%",
   },
   content: {
     padding: 20,
     display: "flex",
     flexDirection: "column",
-    flexWrap: "wrap",
     justifyContent: "flex-end",
     alignItems: "center",
     alignContent: "center",
