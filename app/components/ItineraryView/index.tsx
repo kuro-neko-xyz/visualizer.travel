@@ -78,17 +78,93 @@ const ItineraryView: FC<ItineraryViewProps> = ({
             return (
               <View
                 key={timeFrameElement.toISOString()}
-                style={styles.timeFrameElement}
+                style={styles.timeFrameElementContainer}
               >
-                <Text>
-                  {timeFrameElement.toLocaleString([], {
-                    timeZone,
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </Text>
+                <View style={styles.timeFrameElement}>
+                  <Text>
+                    {timeFrameElement.toLocaleString([], {
+                      timeZone,
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </Text>
+                </View>
+                <View style={styles.timeScale}>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>00</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>01</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>02</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>03</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>04</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>05</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>06</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>07</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>08</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>09</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>10</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>11</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>12</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>13</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>14</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>15</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>16</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>17</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>18</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>19</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>20</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>21</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>22</Text>
+                  </View>
+                  <View style={styles.timeScaleElement}>
+                    <Text style={styles.timeScaleLabel}>23</Text>
+                  </View>
+                </View>
               </View>
             );
           })}
@@ -121,6 +197,15 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
   },
+  timeFrameElementContainer: {
+    minWidth: "100%",
+    maxWidth: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
   timeFrameElement: {
     borderStyle: "solid",
     borderTopWidth: 1,
@@ -131,6 +216,22 @@ const styles = StyleSheet.create({
     minWidth: "90%",
     maxWidth: "90%",
     height: DAY_HEIGHT,
+  },
+  timeScale: {
+    width: 10,
+    height: DAY_HEIGHT,
+    position: "absolute",
+    right: 10,
+  },
+  timeScaleElement: {
+    width: "100%",
+    height: DAY_HEIGHT / 24,
+    borderStyle: "solid",
+    borderTopWidth: 1,
+  },
+  timeScaleLabel: {
+    fontSize: 5,
+    paddingLeft: 2,
   },
 });
 
