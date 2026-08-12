@@ -1,9 +1,7 @@
 import { PLANE_CODE } from "@/constants/lanes";
-import {
-  Flights,
-  ItineraryElement,
-  TimeFrame,
-} from "@visualizer.travel/shared";
+import { Flights } from "@/models/Flight";
+import { ItineraryElement } from "@/models/Itinerary";
+import TimeFrame from "@/models/TimeFrame";
 
 const transformItinerary = (sortedFlights: Flights, timeFrame: TimeFrame) => {
   const dayBefore = timeFrame.getFirstDay();

@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Trips } from "@visualizer.travel/shared";
 import TripView from "../TripView";
+import { Trips } from "@/models/Trip";
 
 interface FlightsContainerProps {
   trips: Trips;

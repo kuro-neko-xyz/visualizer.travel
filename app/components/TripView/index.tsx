@@ -1,8 +1,8 @@
-import { Trip, Trips } from "@visualizer.travel/shared";
 import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Select from "../Select";
 import FlightInfo from "../FlightInfo";
+import { Trips, Trip } from "@/models/Trip";
 
 interface TripViewProps {
   setTrips: Dispatch<SetStateAction<Trips>>;

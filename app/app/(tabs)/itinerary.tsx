@@ -2,16 +2,13 @@ import ContainerTab from "@/components/ContainerTab";
 import Select from "@/components/Select";
 import getTimeFrame from "@/helpers/itinerary/getTimeFrame";
 import transformItinerary from "@/helpers/itinerary/transformItinerary";
-import {
-  Flight,
-  Flights,
-  SelectOptions,
-  Trip,
-} from "@visualizer.travel/shared";
 import { useContext, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import ItineraryContainer from "@/components/ItineraryView";
 import { TripContext } from "./_layout";
+import { Flights, Flight } from "@/models/Flight";
+import { SelectOptions } from "@/models/SelectOption";
+import { Trip } from "@/models/Trip";
 
 export default function ItineraryView() {
   const { trips } = useContext(TripContext);

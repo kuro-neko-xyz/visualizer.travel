@@ -1,4 +1,4 @@
-import { Accommodation, Accommodations } from "@visualizer.travel/shared";
+import { Accommodations, Accommodation } from "@/models/Accommodation";
 import { Dispatch, SetStateAction } from "react";
 
 interface handleDeleteAccommodationParams {

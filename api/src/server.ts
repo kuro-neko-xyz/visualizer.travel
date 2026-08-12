@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
 import postgres from "@fastify/postgres";
-import { AirportsRequestParams } from "@visualizer.travel/shared";
+import { AirportsRequestParams } from "./models/AirportsRequest.ts";
 
 dotenv.config();
 

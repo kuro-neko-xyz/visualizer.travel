@@ -1,4 +1,5 @@
-import { Flight, Trips } from "@visualizer.travel/shared";
+import { Flight } from "@/models/Flight";
+import { Trips } from "@/models/Trip";
 import { Dispatch, SetStateAction } from "react";
 
 interface handleDeleteFlightParams {

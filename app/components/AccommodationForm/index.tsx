@@ -12,8 +12,9 @@ import DatePicker from "react-native-date-picker";
 import setAirportCode from "@/helpers/flights/handleSetAirportCode";
 import Select from "../Select";
 import { timeZones } from "@/constants/timeZones";
-import { SelectOption, Accommodations } from "@visualizer.travel/shared";
 import handleAddAccommodation from "@/helpers/accommodations/handleAddAccommodation";
+import { Accommodations } from "@/models/Accommodation";
+import { SelectOption } from "@/models/SelectOption";
 
 interface AccommodationFormProps {
   accommodationAirportCode: string;
