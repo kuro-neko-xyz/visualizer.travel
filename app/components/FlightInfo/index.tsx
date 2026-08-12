@@ -3,17 +3,25 @@ import { Dispatch, FC, SetStateAction } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CloseButton from "../CloseButton";
 import { Flight } from "@/models/Flight";
-import { Trips } from "@/models/Trip";
+import { Trip, Trips } from "@/models/Trip";
 import { LinearGradient } from "expo-linear-gradient";
 import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
 
 interface FlightInfoProps {
   flight: Flight;
+  setSelectedTimeZone: Dispatch<SetStateAction<string>>;
   setTrips: Dispatch<SetStateAction<Trips>>;
   timeZone: string;
+  trip: Trip;
 }
 
-const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips, timeZone }) => {
+const FlightInfo: FC<FlightInfoProps> = ({
+  flight,
+  setSelectedTimeZone,
+  setTrips,
+  timeZone,
+  trip,
+}) => {
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -59,9 +67,10 @@ const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips, timeZone }) => {
         </View>
       </View>
       <CloseButton
-        handleCloseModal={() =>
-          handleDeleteFlight({ flightId: flight.id, setTrips })
-        }
+        handleCloseModal={() => {
+          handleDeleteFlight({ flightId: flight.id, setTrips });
+          setSelectedTimeZone(trip.flights[0].origin.timeZone);
+        }}
       />
     </View>
   );

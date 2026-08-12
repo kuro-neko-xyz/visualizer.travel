@@ -49,8 +49,10 @@ const TripView: FC<TripViewProps> = ({ setTrips, trip }) => {
           <FlightInfo
             key={flight.id}
             flight={flight}
+            setSelectedTimeZone={setSelectedTimeZone}
             setTrips={setTrips}
             timeZone={selectedTimezone}
+            trip={trip}
           />
         ))}
       </View>

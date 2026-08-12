@@ -9,6 +9,7 @@ interface ParseDateStringParams {
 }
 
 const parseDateString = ({
+  addOffset = true,
   dummyDate,
   timeZone,
   overrideHours,
@@ -22,9 +23,11 @@ const parseDateString = ({
 
   const offset = extendedTimeZone?.currentTimeFormat.substring(0, 6);
 
-  const newDate = new Date(
-    dummyDate.getTime() + parseInt(offset ?? "0", 10) * 60 * 60 * 1000,
-  );
+  const newDate = addOffset
+    ? new Date(
+        dummyDate.getTime() + parseInt(offset ?? "0", 10) * 60 * 60 * 1000,
+      )
+    : new Date(dummyDate);
 
   const year = newDate.getUTCFullYear();
   const month = String(newDate.getUTCMonth() + 1).padStart(2, "0");
