@@ -27,13 +27,17 @@ const handleAddFlight = ({
   originTimeZone,
   setTrips,
 }: HandleAddFlightParams) => {
+  const offsetInMinutes = new Date().getTimezoneOffset();
+
   const origin = parseDateString({
-    dummyDate: departureDate,
+    addOffset: false,
+    dummyDate: new Date(departureDate.getTime() - offsetInMinutes * 60 * 1000),
     timeZone: originTimeZone,
   });
 
   const destination = parseDateString({
-    dummyDate: arrivalDate,
+    addOffset: false,
+    dummyDate: new Date(arrivalDate.getTime() - offsetInMinutes * 60 * 1000),
     timeZone: destinationTimeZone,
   });
 
