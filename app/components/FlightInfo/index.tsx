@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 import CloseButton from "../CloseButton";
 import { Flight } from "@/models/Flight";
 import { Trips } from "@/models/Trip";
+import { LinearGradient } from "expo-linear-gradient";
+import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
 
 interface FlightInfoProps {
   flight: Flight;
@@ -14,6 +16,15 @@ interface FlightInfoProps {
 const FlightInfo: FC<FlightInfoProps> = ({ flight, setTrips, timeZone }) => {
   return (
     <View style={styles.container}>
+      <LinearGradient
+        colors={[
+          generateRandomColorFromCode(flight.origin.airportCode),
+          generateRandomColorFromCode(flight.destination.airportCode),
+        ]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        style={styles.background}
+      />
       <View style={styles.info}>
         <View style={styles.details}>
           <Text style={styles.header}>{flight.origin.airportCode}</Text>
@@ -68,6 +79,14 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingLeft: 20,
     paddingRight: 20,
+  },
+  background: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    borderRadius: 10,
   },
   info: {
     flex: 1,
