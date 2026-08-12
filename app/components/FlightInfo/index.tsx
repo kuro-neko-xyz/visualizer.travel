@@ -1,8 +1,9 @@
 import handleDeleteFlight from "@/helpers/flights/handleDeleteFlight";
-import { Flight, Trips } from "@visualizer.travel/shared";
 import { Dispatch, FC, SetStateAction } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CloseButton from "../CloseButton";
+import { Flight } from "@/models/Flight";
+import { Trips } from "@/models/Trip";
 
 interface FlightInfoProps {
   flight: Flight;

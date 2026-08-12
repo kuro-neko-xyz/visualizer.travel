@@ -2,7 +2,7 @@ import { Text } from "react-native";
 import { Tabs } from "expo-router";
 import useStorage from "@/hooks/useStorage";
 import { createContext, Dispatch, SetStateAction } from "react";
-import { Trips } from "@visualizer.travel/shared";
+import { Trips } from "@/models/Trip";
 
 interface TripContextType {
   trips: Trips;

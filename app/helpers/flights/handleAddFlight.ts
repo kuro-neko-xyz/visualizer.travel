@@ -1,7 +1,8 @@
-import { Flight, Trips } from "@visualizer.travel/shared";
 import { randomUUID } from "expo-crypto";
 import { Dispatch, SetStateAction } from "react";
 import parseDateString from "../shared/parseDateString";
+import { Flight } from "@/models/Flight";
+import { Trips } from "@/models/Trip";
 
 interface HandleAddFlightParams {
   arrivalDate: Date;

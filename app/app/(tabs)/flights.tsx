@@ -2,8 +2,9 @@ import { FC, useContext, useState } from "react";
 import FlightForm from "@/components/FlightForm";
 import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
-import { Airports, Trip } from "@visualizer.travel/shared";
 import { TripContext } from "./_layout";
+import { Trip } from "@/models/Trip";
+import { Airports } from "@/models/Airport";
 
 const FlightsView: FC = () => {
   const { trips, setTrips } = useContext(TripContext);

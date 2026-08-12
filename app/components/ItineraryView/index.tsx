@@ -1,5 +1,6 @@
 import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
-import { ItineraryElement, TimeFrame } from "@visualizer.travel/shared";
+import { ItineraryElement } from "@/models/Itinerary";
+import TimeFrame from "@/models/TimeFrame";
 import { getTimeZones } from "@vvo/tzdb";
 import { FC } from "react";
 import {

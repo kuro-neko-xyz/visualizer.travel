@@ -1,4 +1,5 @@
-import { Flights, TimeFrame } from "@visualizer.travel/shared";
+import { Flights } from "@/models/Flight";
+import TimeFrame from "@/models/TimeFrame";
 import parseDateString from "../shared/parseDateString";
 
 const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {

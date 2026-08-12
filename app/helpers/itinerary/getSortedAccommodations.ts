@@ -1,4 +1,4 @@
-import { Accommodations } from "@visualizer.travel/shared";
+import { Accommodations } from "@/models/Accommodation";
 
 const getSortedAccommodations = (
   accommodations: Accommodations,

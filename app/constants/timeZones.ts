@@ -1,4 +1,4 @@
-import { SelectOptions } from "@visualizer.travel/shared";
+import { SelectOptions } from "@/models/SelectOption";
 
 export const timeZones: SelectOptions = [
   { label: "UTC-12:00", value: "-12:00" },

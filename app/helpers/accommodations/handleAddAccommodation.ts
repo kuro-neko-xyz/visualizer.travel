@@ -1,8 +1,5 @@
-import {
-  Accommodation,
-  Accommodations,
-  SelectOption,
-} from "@visualizer.travel/shared";
+import { Accommodations, Accommodation } from "@/models/Accommodation";
+import { SelectOption } from "@/models/SelectOption";
 import { randomUUID } from "expo-crypto";
 import { Dispatch, SetStateAction } from "react";
 
