@@ -16,6 +16,7 @@ import Select from "../Select";
 import { Airports } from "@/models/Airport";
 import { SelectOptions } from "@/models/SelectOption";
 import { Trips } from "@/models/Trip";
+import { Picker } from "@react-native-picker/picker";
 
 interface FlightFormProps {
   arrivalDate: Date;
@@ -134,14 +135,20 @@ const FlightForm: FC<FlightFormProps> = ({
             open={showDatePicker}
           />
           <View style={styles.row}>
-            <Select
-              onChange={(option) => setCurrentTrip(option.value)}
-              options={options}
-              value={options.find((trip) => trip.value === currentTrip)}
-              style={styles.select}
+            <Picker
+              dropdownIconColor="black"
+              style={styles.picker}
+              selectedValue={currentTrip}
+              onValueChange={(trip) => setCurrentTrip(trip)}
             >
-              <Text style={styles.hint}>▼</Text>
-            </Select>
+              {options.map((option) => (
+                <Picker.Item
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                />
+              ))}
+            </Picker>
           </View>
           {!currentTrip && (
             <>
@@ -372,18 +379,8 @@ const styles = StyleSheet.create({
   disabled: {
     backgroundColor: "#CCCCCC",
   },
-  select: {
-    borderStyle: "solid",
-    borderWidth: 1,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 25,
-    borderRadius: 5,
-  },
-  hint: {
-    position: "absolute",
-    right: 2,
-    top: 5,
+  picker: {
+    color: "black",
+    flex: 1,
   },
 });

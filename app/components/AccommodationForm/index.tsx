@@ -10,8 +10,6 @@ import {
 import CloseButton from "../CloseButton";
 import DatePicker from "react-native-date-picker";
 import setAirportCode from "@/helpers/flights/handleSetAirportCode";
-import Select from "../Select";
-import { timeZones } from "@/constants/timeZones";
 import handleAddAccommodation from "@/helpers/accommodations/handleAddAccommodation";
 import { Accommodations } from "@/models/Accommodation";
 import { SelectOption } from "@/models/SelectOption";
@@ -107,13 +105,6 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
           </View>
           <View style={styles.row}>
             <Text style={styles.cell}>Time Zone</Text>
-            <Select
-              style={[styles.cell, styles.input]}
-              onChange={setTimeZone}
-              options={timeZones}
-              title="Select Origin Time Zone"
-              value={timeZone}
-            />
           </View>
           <View style={styles.row}>
             <Text style={styles.cell}>Check-in Date</Text>
