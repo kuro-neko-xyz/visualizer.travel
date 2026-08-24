@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Select from "../Select";
 import FlightInfo from "../FlightInfo";
 import { Trips, Trip } from "@/models/Trip";
+import { Picker } from "@react-native-picker/picker";
 
 interface TripViewProps {
   setTrips: Dispatch<SetStateAction<Trips>>;
@@ -43,6 +44,18 @@ const TripView: FC<TripViewProps> = ({ setTrips, trip }) => {
         >
           <Text style={styles.hint}>▼</Text>
         </Select>
+        <Picker
+          selectedValue={selectedTimezone}
+          onValueChange={(tz) => setSelectedTimeZone(tz)}
+        >
+          {options.map((option) => (
+            <Picker.Item
+              key={option.value}
+              label={option.label}
+              value={option.value}
+            />
+          ))}
+        </Picker>
       </View>
       <View style={styles.flightsContainer}>
         {trip.flights.map((flight) => (
