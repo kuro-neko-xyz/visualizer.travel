@@ -3,8 +3,8 @@ import TimeFrame from "@/models/TimeFrame";
 import parseDateString from "../shared/parseDateString";
 
 const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {
-  const firstFlight = sortedFlights.get(0);
-  const lastFlight = sortedFlights.get(-1);
+  const firstFlight = sortedFlights[0];
+  const lastFlight = sortedFlights[sortedFlights.length - 1];
 
   if (!firstFlight || !lastFlight) {
     return null;

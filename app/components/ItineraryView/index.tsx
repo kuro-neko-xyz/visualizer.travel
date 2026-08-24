@@ -89,7 +89,7 @@ const ItineraryView: FC<ItineraryViewProps> = ({
             key={"destination"}
             style={{
               backgroundColor: generateRandomColorFromCode(
-                itinerary.get(-1)?.location ?? "",
+                itinerary[itinerary.length - 1]?.location ?? "",
               ),
               minHeight: DAY_HEIGHT,
               overflowY: "hidden",
