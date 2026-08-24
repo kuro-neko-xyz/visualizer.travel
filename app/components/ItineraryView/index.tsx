@@ -46,8 +46,14 @@ const ItineraryView: FC<ItineraryViewProps> = ({
 
   const displacement = (difference * DAY_HEIGHT) / 1440 + padding * DAY_HEIGHT;
 
+  const heights = itinerary.map(
+    (element) =>
+      ((element.endDate.getTime() - element.startDate.getTime()) * DAY_HEIGHT) /
+      86400000,
+  );
+
   return (
-    <View style={[styles.container, { minHeight: height - 302 }]}>
+    <View style={[styles.container, { minHeight: height - 280 }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.itineraryContainer}>
           <View
@@ -62,11 +68,8 @@ const ItineraryView: FC<ItineraryViewProps> = ({
               width: 40,
             }}
           />
-          {itinerary.map((element) => {
-            const height =
-              ((element.endDate.getTime() - element.startDate.getTime()) *
-                DAY_HEIGHT) /
-              86400000;
+          {itinerary.map((element, index) => {
+            const height = heights[index];
 
             return (
               <View
@@ -91,7 +94,9 @@ const ItineraryView: FC<ItineraryViewProps> = ({
               backgroundColor: generateRandomColorFromCode(
                 itinerary[itinerary.length - 1]?.location ?? "",
               ),
-              minHeight: DAY_HEIGHT,
+              minHeight:
+                [...timeFrame].length * DAY_HEIGHT -
+                heights.reduce((acc, cur) => acc + cur),
               overflowY: "hidden",
               width: 40,
             }}
