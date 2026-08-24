@@ -1,5 +1,4 @@
 import ContainerTab from "@/components/ContainerTab";
-import Select from "@/components/Select";
 import getTimeFrame from "@/helpers/itinerary/getTimeFrame";
 import transformItinerary from "@/helpers/itinerary/transformItinerary";
 import { useContext, useMemo, useState } from "react";
@@ -9,6 +8,7 @@ import { TripContext } from "./_layout";
 import { Flights, Flight } from "@/models/Flight";
 import { SelectOptions } from "@/models/SelectOption";
 import { Trip } from "@/models/Trip";
+import { Picker } from "@react-native-picker/picker";
 
 export default function ItineraryView() {
   const { trips } = useContext(TripContext);
@@ -73,41 +73,47 @@ export default function ItineraryView() {
     <ContainerTab>
       <View style={styles.container}>
         <View style={styles.row}>
-          <Text style={styles.label}>Select Trip</Text>
-        </View>
-        <View style={styles.row}>
-          <Select
-            onChange={(option) => {
-              setSelectedTrip(option.value);
+          <Text style={styles.label}>Trip:</Text>
+          <Picker
+            dropdownIconColor="black"
+            style={styles.picker}
+            selectedValue={selectedTrip}
+            onValueChange={(trip) => {
+              setSelectedTrip(trip);
 
               const tempTimeZone =
-                trips.find((trip) => trip.uuid === option.value)?.flights[0]
-                  .origin.timeZone ?? "";
+                trips.find((t) => t.uuid === trip)?.flights[0].origin
+                  .timeZone ?? "";
 
               setSelectedTimeZone(tempTimeZone);
               setInitialTimeZone(tempTimeZone);
             }}
-            options={options}
-            value={options.find((trip) => trip.value === selectedTrip)}
-            style={styles.select}
           >
-            <Text style={styles.hint}>▼</Text>
-          </Select>
+            {options.map((option) => (
+              <Picker.Item
+                key={option.value}
+                label={option.label}
+                value={option.value}
+              />
+            ))}
+          </Picker>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Select Time Zone to Display Data</Text>
-        </View>
-        <View style={styles.row}>
-          <Select
-            onChange={(option) => setSelectedTimeZone(option.value)}
-            options={timeZoneOptions}
-            value={timeZoneOptions.find(
-              (option) => option.value === selectedTimeZone,
-            )}
-            style={styles.select}
+          <Text style={styles.label}>Time Zone:</Text>
+          <Picker
+            dropdownIconColor="black"
+            style={styles.picker}
+            selectedValue={selectedTimeZone}
+            onValueChange={(tz) => setSelectedTimeZone(tz)}
           >
-            <Text style={styles.hint}>▼</Text>
-          </Select>
+            {timeZoneOptions.map((option) => (
+              <Picker.Item
+                key={option.value}
+                label={option.label}
+                value={option.value}
+              />
+            ))}
+          </Picker>
         </View>
         <ItineraryContainer
           initialTimeZone={initialTimeZone}
@@ -136,6 +142,7 @@ const styles = StyleSheet.create({
   },
   label: {
     textAlign: "center",
+    fontSize: 16,
   },
   select: {
     borderStyle: "solid",
@@ -150,5 +157,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 2,
     top: 5,
+  },
+  picker: {
+    color: "black",
+    flex: 1,
+    maxWidth: "70%",
   },
 });

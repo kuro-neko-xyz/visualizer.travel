@@ -1,8 +1,8 @@
 import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Select from "../Select";
 import FlightInfo from "../FlightInfo";
 import { Trips, Trip } from "@/models/Trip";
+import { Picker } from "@react-native-picker/picker";
 
 interface TripViewProps {
   setTrips: Dispatch<SetStateAction<Trips>>;
@@ -32,17 +32,21 @@ const TripView: FC<TripViewProps> = ({ setTrips, trip }) => {
     <View key={trip.uuid}>
       <Text style={[styles.label, styles.header]}>{trip.name}</Text>
       <View style={styles.row}>
-        <Text style={styles.label}>Select Time Zone to Display Data</Text>
-      </View>
-      <View style={styles.row}>
-        <Select
-          onChange={(option) => setSelectedTimeZone(option.value)}
-          options={options}
-          value={options.find((option) => option.value === selectedTimezone)}
-          style={styles.select}
+        <Text style={styles.label}>Time Zone:</Text>
+        <Picker
+          dropdownIconColor="black"
+          style={styles.picker}
+          selectedValue={selectedTimezone}
+          onValueChange={(tz) => setSelectedTimeZone(tz)}
         >
-          <Text style={styles.hint}>▼</Text>
-        </Select>
+          {options.map((option) => (
+            <Picker.Item
+              key={option.value}
+              label={option.label}
+              value={option.value}
+            />
+          ))}
+        </Picker>
       </View>
       <View style={styles.flightsContainer}>
         {trip.flights.map((flight) => (
@@ -63,6 +67,7 @@ const TripView: FC<TripViewProps> = ({ setTrips, trip }) => {
 const styles = StyleSheet.create({
   label: {
     textAlign: "center",
+    fontSize: 16,
   },
   header: {
     fontWeight: "bold",
@@ -87,19 +92,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: "100%",
   },
-  select: {
-    borderStyle: "solid",
-    borderWidth: 1,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 20,
-    paddingRight: 25,
-    borderRadius: 5,
-  },
-  hint: {
-    position: "absolute",
-    right: 2,
-    top: 5,
+  picker: {
+    color: "black",
+    flex: 1,
   },
 });
 
