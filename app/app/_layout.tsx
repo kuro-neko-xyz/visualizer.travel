@@ -2,7 +2,6 @@ import { Stack } from "expo-router";
 import { Platform } from "react-native";
 import * as Keychain from "react-native-keychain";
 import crypto from "react-native-quick-crypto";
-
 import { createMMKV } from "react-native-mmkv";
 import { useEffect } from "react";
 

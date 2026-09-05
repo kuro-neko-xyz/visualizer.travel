@@ -6,7 +6,7 @@ import { Trips } from "@/models/Trip";
 
 interface TripContextType {
   trips: Trips;
-  setTrips: Dispatch<SetStateAction<Trips>>; // Matches the type of a standard useState setter
+  setTrips: Dispatch<SetStateAction<Trips>>;
 }
 
 export const TripContext = createContext<TripContextType>({
@@ -22,7 +22,10 @@ export default function TabLayout() {
       <Tabs initialRouteName="flights" screenOptions={{ headerShown: false }}>
         <Tabs.Screen
           name="flights"
-          options={{ title: "Flights", tabBarIcon: () => <Text>✈️</Text> }}
+          options={{
+            title: "Flights",
+            tabBarIcon: () => <Text>✈️</Text>,
+          }}
         />
         <Tabs.Screen
           name="accommodations"
@@ -33,7 +36,10 @@ export default function TabLayout() {
         />
         <Tabs.Screen
           name="itinerary"
-          options={{ title: "Itinerary", tabBarIcon: () => <Text>🗓️</Text> }}
+          options={{
+            title: "Itinerary",
+            tabBarIcon: () => <Text>🗓️</Text>,
+          }}
         />
         <Tabs.Screen
           name="index"
