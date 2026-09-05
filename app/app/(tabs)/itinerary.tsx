@@ -1,7 +1,7 @@
 import ContainerTab from "@/components/ContainerTab";
 import getTimeFrame from "@/helpers/itinerary/getTimeFrame";
 import transformItinerary from "@/helpers/itinerary/transformItinerary";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import ItineraryContainer from "@/components/ItineraryView";
 import { TripContext } from "./_layout";
@@ -9,6 +9,8 @@ import { Flights, Flight } from "@/models/Flight";
 import { SelectOptions } from "@/models/SelectOption";
 import { Trip } from "@/models/Trip";
 import { Picker } from "@react-native-picker/picker";
+import { ItineraryElement } from "@/models/Itinerary";
+import TimeFrame from "@/models/TimeFrame";
 
 export default function ItineraryView() {
   const { trips } = useContext(TripContext);
@@ -17,6 +19,9 @@ export default function ItineraryView() {
   const [initialTimeZone, setInitialTimeZone] = useState(
     trips[0]?.flights?.[0].origin.timeZone,
   );
+  const [flights, setFlights] = useState<Flights>();
+  const [timeFrame, setTimeFrame] = useState<TimeFrame | null>();
+  const [itinerary, setItinerary] = useState<ItineraryElement[] | null>();
 
   const options: SelectOptions = useMemo(() => {
     return trips.map((trip: Trip) => ({
@@ -24,12 +29,6 @@ export default function ItineraryView() {
       label: trip.name,
     }));
   }, [trips]);
-
-  const flights: Flights = useMemo(() => {
-    return (
-      trips.find((trip: Trip) => trip.uuid === selectedTrip)?.flights ?? []
-    );
-  }, [trips, selectedTrip]);
 
   const timeZoneOptions = useMemo(() => {
     if (!flights) return [];
@@ -46,10 +45,41 @@ export default function ItineraryView() {
   }, [flights]);
 
   const [selectedTimeZone, setSelectedTimeZone] = useState(
-    timeZoneOptions[0].value,
+    timeZoneOptions[0]?.value,
   );
 
-  if (!selectedTrip) {
+  useEffect(() => {
+    const resetItinerary = () => {
+      setItinerary(null);
+    };
+
+    resetItinerary();
+
+    setFlights(
+      trips.find((trip: Trip) => trip.uuid === selectedTrip)?.flights ?? [],
+    );
+  }, [trips, selectedTrip]);
+
+  useEffect(() => {
+    const calculateTimeFrame = () => {
+      if (flights) {
+        setTimeFrame(getTimeFrame(flights));
+      }
+    };
+    calculateTimeFrame();
+  }, [flights]);
+
+  useEffect(() => {
+    const calculateItinerary = () => {
+      if (flights && timeFrame) {
+        setItinerary(transformItinerary(flights, timeFrame));
+      }
+    };
+
+    calculateItinerary();
+  }, [flights, timeFrame]);
+
+  if (!trips) {
     return (
       <ContainerTab>
         <Text>No trips available to display the itinerary.</Text>
@@ -57,9 +87,7 @@ export default function ItineraryView() {
     );
   }
 
-  const timeFrame = getTimeFrame(flights);
-
-  if (!timeFrame) {
+  if (!flights) {
     return (
       <ContainerTab>
         <Text>No flights available to display the itinerary.</Text>
@@ -67,7 +95,13 @@ export default function ItineraryView() {
     );
   }
 
-  const itinerary = transformItinerary(flights, timeFrame);
+  if (!timeFrame || !itinerary) {
+    return (
+      <ContainerTab>
+        <Text>Loading...</Text>
+      </ContainerTab>
+    );
+  }
 
   return (
     <ContainerTab>
