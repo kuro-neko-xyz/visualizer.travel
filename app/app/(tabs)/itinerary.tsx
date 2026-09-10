@@ -17,7 +17,7 @@ export default function ItineraryView() {
 
   const [selectedTrip, setSelectedTrip] = useState(trips[0]?.uuid);
   const [initialTimeZone, setInitialTimeZone] = useState(
-    trips[0]?.flights?.[0].origin.timeZone,
+    trips[0]?.flights?.[0]?.origin.timeZone,
   );
   const [flights, setFlights] = useState<Flights>();
   const [timeFrame, setTimeFrame] = useState<TimeFrame | null>();
@@ -79,7 +79,7 @@ export default function ItineraryView() {
     calculateItinerary();
   }, [flights, timeFrame]);
 
-  if (!trips) {
+  if (!trips || !trips.length) {
     return (
       <ContainerTab>
         <Text>No trips available to display the itinerary.</Text>
@@ -87,7 +87,7 @@ export default function ItineraryView() {
     );
   }
 
-  if (!flights) {
+  if (!flights || !flights.length) {
     return (
       <ContainerTab>
         <Text>No flights available to display the itinerary.</Text>
