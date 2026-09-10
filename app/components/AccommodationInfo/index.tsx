@@ -2,28 +2,48 @@ import handleDeleteAccommodation from "@/helpers/accommodations/handleDeleteAcco
 import { Dispatch, FC, SetStateAction } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CloseButton from "../CloseButton";
-import { Accommodation, Accommodations } from "@/models/Accommodation";
+import { Accommodation } from "@/models/Accommodation";
+import { Trip, Trips } from "@/models/Trip";
+import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
 
 interface AccommodationInfoProps {
   accommodation: Accommodation;
-  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setSelectedTimeZone: Dispatch<SetStateAction<string>>;
+  setTrips: Dispatch<SetStateAction<Trips>>;
+  timeZone: string;
+  trip: Trip;
 }
 
 const AccommodationInfo: FC<AccommodationInfoProps> = ({
   accommodation,
-  setAccommodations,
+  setSelectedTimeZone,
+  setTrips,
+  timeZone,
+  trip,
 }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: generateRandomColorFromCode(
+            accommodation.airportCode,
+          ),
+        },
+      ]}
+    >
       <View style={styles.info}>
-        <Text style={styles.title}>{`${accommodation.airportCode} 🏨`}</Text>
+        <Text>{`${accommodation.airportCode} 🏨`}</Text>
         <View style={styles.details}>
           <Text style={styles.header}>Check-in</Text>
           <Text style={styles.data}>
-            {new Date(accommodation.checkIn).toLocaleDateString()}
+            {new Date(accommodation.checkIn).toLocaleDateString([], {
+              timeZone,
+            })}
           </Text>
           <Text style={styles.data}>
             {new Date(accommodation.checkIn).toLocaleTimeString([], {
+              timeZone,
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -32,10 +52,13 @@ const AccommodationInfo: FC<AccommodationInfoProps> = ({
         <View style={styles.details}>
           <Text style={styles.header}>Check-out</Text>
           <Text style={styles.data}>
-            {new Date(accommodation.checkOut).toLocaleDateString()}
+            {new Date(accommodation.checkOut).toLocaleDateString([], {
+              timeZone,
+            })}
           </Text>
           <Text style={styles.data}>
             {new Date(accommodation.checkOut).toLocaleTimeString([], {
+              timeZone,
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -43,12 +66,13 @@ const AccommodationInfo: FC<AccommodationInfoProps> = ({
         </View>
       </View>
       <CloseButton
-        handleCloseModal={() =>
+        handleCloseModal={() => {
           handleDeleteAccommodation({
             accommodationId: accommodation.id,
-            setAccommodations,
-          })
-        }
+            setTrips,
+          });
+          setSelectedTimeZone(trip.accommodations?.[0]?.timeZone);
+        }}
       />
     </View>
   );
@@ -61,19 +85,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "black",
     borderWidth: 1,
-    width: 150,
+    width: "90%",
     height: 100,
     margin: 10,
-    position: "relative",
-  },
-  title: {
-    position: "absolute",
-    top: -20,
-    left: 10,
-    fontWeight: "bold",
-    fontSize: 16,
-    fontFamily: "Nunito",
-    letterSpacing: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   info: {
     flex: 1,
@@ -92,7 +108,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontWeight: "bold",
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Nunito",
     letterSpacing: 1,
   },

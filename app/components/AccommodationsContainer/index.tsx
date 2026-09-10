@@ -1,40 +1,50 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import AccommodationInfo from "../AccommodationInfo";
-import { Accommodations } from "@/models/Accommodation";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Trips } from "@/models/Trip";
+import TripView from "../TripView";
 
 interface AccommodationContainerProps {
-  accommodations: Accommodations;
-  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  trips: Trips;
+  setTrips: Dispatch<SetStateAction<Trips>>;
 }
 
 const AccommodationsContainer: FC<AccommodationContainerProps> = ({
-  accommodations,
-  setAccommodations,
+  trips,
+  setTrips,
 }) => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {accommodations.map((accommodation) => (
-        <AccommodationInfo
-          key={accommodation.id}
-          accommodation={accommodation}
-          setAccommodations={setAccommodations}
-        />
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content}>
+        {trips.map((trip) => (
+          <TripView
+            key={trip.uuid}
+            mode="accommodations"
+            setTrips={setTrips}
+            trip={trip}
+          />
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
+    minWidth: "100%",
+    maxWidth: "100%",
+  },
+  content: {
     padding: 20,
     display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: "column",
+    justifyContent: "flex-end",
     alignItems: "center",
     alignContent: "center",
     minHeight: "100%",
+    minWidth: "100%",
+    maxWidth: "100%",
+    paddingBottom: 100,
   },
 });
 

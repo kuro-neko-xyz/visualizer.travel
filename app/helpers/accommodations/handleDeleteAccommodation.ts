@@ -1,19 +1,29 @@
-import { Accommodations, Accommodation } from "@/models/Accommodation";
+import { Accommodation } from "@/models/Accommodation";
+import { Trips } from "@/models/Trip";
 import { Dispatch, SetStateAction } from "react";
 
 interface handleDeleteAccommodationParams {
   accommodationId: string;
-  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  setTrips: Dispatch<SetStateAction<Trips>>;
 }
 
 const handleDeleteAccommodation = ({
   accommodationId,
-  setAccommodations,
+  setTrips,
 }: handleDeleteAccommodationParams) => {
-  setAccommodations((prevAccommodations: Accommodations) =>
-    prevAccommodations.filter(
-      (accommodation: Accommodation) => accommodation.id !== accommodationId,
-    ),
+  setTrips((prevTrips: Trips) =>
+    prevTrips
+      .map((trip) => {
+        const accommodations = trip.accommodations.filter(
+          (accommodation: Accommodation) =>
+            accommodation.id !== accommodationId,
+        );
+        return {
+          ...trip,
+          accommodations,
+        };
+      })
+      .filter((trip) => trip.accommodations?.length || trip.flights?.length),
   );
 };
 

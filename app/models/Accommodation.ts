@@ -3,6 +3,7 @@ export interface Accommodation {
   airportCode: string;
   checkIn: string;
   checkOut: string;
+  timeZone: string;
 }
 
 export type Accommodations = Accommodation[];

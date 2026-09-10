@@ -3,15 +3,21 @@ import { StyleSheet, Text, View } from "react-native";
 import FlightInfo from "../FlightInfo";
 import { Trips, Trip } from "@/models/Trip";
 import { Picker } from "@react-native-picker/picker";
+import AccommodationInfo from "../AccommodationInfo";
 
 interface TripViewProps {
+  mode?: "flights" | "accommodations";
   setTrips: Dispatch<SetStateAction<Trips>>;
   trip: Trip;
 }
 
-const TripView: FC<TripViewProps> = ({ setTrips, trip }) => {
+const TripView: FC<TripViewProps> = ({ mode = "flights", setTrips, trip }) => {
   const [selectedTimezone, setSelectedTimeZone] = useState(
-    trip.flights[0].origin.timeZone,
+    mode === "flights"
+      ? (trip?.flights?.[0]?.origin.timeZone ??
+          trip?.accommodations?.[0]?.timeZone)
+      : (trip?.accommodations?.[0]?.timeZone ??
+          trip?.flights?.[0]?.origin.timeZone),
   );
 
   const options = useMemo(() => {
@@ -48,18 +54,34 @@ const TripView: FC<TripViewProps> = ({ setTrips, trip }) => {
           ))}
         </Picker>
       </View>
-      <View style={styles.flightsContainer}>
-        {trip.flights.map((flight) => (
-          <FlightInfo
-            key={flight.id}
-            flight={flight}
-            setSelectedTimeZone={setSelectedTimeZone}
-            setTrips={setTrips}
-            timeZone={selectedTimezone}
-            trip={trip}
-          />
-        ))}
-      </View>
+      {mode === "flights" && (
+        <View style={styles.cardsContainer}>
+          {trip.flights?.map((flight) => (
+            <FlightInfo
+              key={flight.id}
+              flight={flight}
+              setSelectedTimeZone={setSelectedTimeZone}
+              setTrips={setTrips}
+              timeZone={selectedTimezone}
+              trip={trip}
+            />
+          ))}
+        </View>
+      )}
+      {mode === "accommodations" && (
+        <View style={styles.cardsContainer}>
+          {trip.accommodations?.map((accommodation) => (
+            <AccommodationInfo
+              key={accommodation.id}
+              accommodation={accommodation}
+              setSelectedTimeZone={setSelectedTimeZone}
+              setTrips={setTrips}
+              timeZone={selectedTimezone}
+              trip={trip}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 };
@@ -74,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 20,
   },
-  flightsContainer: {
+  cardsContainer: {
     minWidth: "100%",
     maxWidth: "100%",
     display: "flex",
