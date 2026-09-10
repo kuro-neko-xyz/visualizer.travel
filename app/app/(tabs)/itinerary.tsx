@@ -11,6 +11,7 @@ import { Trip } from "@/models/Trip";
 import { Picker } from "@react-native-picker/picker";
 import { ItineraryElement } from "@/models/Itinerary";
 import TimeFrame from "@/models/TimeFrame";
+import { Accommodations } from "@/models/Accommodation";
 
 export default function ItineraryView() {
   const { trips } = useContext(TripContext);
@@ -18,6 +19,7 @@ export default function ItineraryView() {
   const [selectedTrip, setSelectedTrip] = useState(trips[0]?.uuid);
   const [initialTimeZone, setInitialTimeZone] = useState<string>();
   const [flights, setFlights] = useState<Flights>();
+  const [accommodations, setAccommodations] = useState<Accommodations>();
   const [timeFrame, setTimeFrame] = useState<TimeFrame | null>();
   const [itinerary, setItinerary] = useState<ItineraryElement[] | null>();
 
@@ -61,6 +63,10 @@ export default function ItineraryView() {
 
     setFlights(
       trips.find((trip: Trip) => trip.uuid === selectedTrip)?.flights ?? [],
+    );
+    setAccommodations(
+      trips.find((trip: Trip) => trip.uuid === selectedTrip)?.accommodations ??
+        [],
     );
   }, [trips, selectedTrip]);
 
@@ -155,6 +161,7 @@ export default function ItineraryView() {
         </View>
         {initialTimeZone && (
           <ItineraryContainer
+            accommodations={accommodations}
             initialTimeZone={initialTimeZone}
             itinerary={itinerary}
             timeFrame={timeFrame}
