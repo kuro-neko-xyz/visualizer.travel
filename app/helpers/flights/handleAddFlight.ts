@@ -54,12 +54,14 @@ const handleAddFlight = ({
       timeZone: destination.timeZone,
     },
   };
+
   if (currentTrip === "") {
     setTrips((prevTrips: Trips) => [
       ...prevTrips,
       {
         uuid: randomUUID(),
         name: currentTripName,
+        accommodations: [],
         flights: [flightData],
       },
     ]);
@@ -72,7 +74,7 @@ const handleAddFlight = ({
 
         return {
           ...trip,
-          flights: [...trip.flights, flightData].sort(
+          flights: [...(trip.flights ?? []), flightData].sort(
             (a, b) =>
               new Date(a.origin.dateTime).getTime() -
               new Date(b.origin.dateTime).getTime(),

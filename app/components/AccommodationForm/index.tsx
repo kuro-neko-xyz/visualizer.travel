@@ -9,45 +9,62 @@ import {
 } from "react-native";
 import CloseButton from "../CloseButton";
 import DatePicker from "react-native-date-picker";
-import setAirportCode from "@/helpers/flights/handleSetAirportCode";
 import handleAddAccommodation from "@/helpers/accommodations/handleAddAccommodation";
-import { Accommodations } from "@/models/Accommodation";
-import { SelectOption } from "@/models/SelectOption";
+import Autocomplete from "../Autocomplete";
+import { Airports } from "@/models/Airport";
+import AirportOption from "../AirportOption";
+import { Picker } from "@react-native-picker/picker";
+import { SelectOptions } from "@/models/SelectOption";
+import { Trips } from "@/models/Trip";
 
 interface AccommodationFormProps {
-  accommodationAirportCode: string;
+  accommodationAirport: string;
+  accommodationOptions: Airports;
+  accommodationTimeZone: string;
   checkInDate: Date;
   checkOutDate: Date;
+  currentTrip: string;
+  currentTripName: string;
+  handleAccommodationChange: (search: string) => void;
   isCheckIn?: boolean;
   isTime?: boolean;
-  setAccommodationAirportCode: Dispatch<SetStateAction<string>>;
+  setAccommodationAirport: Dispatch<SetStateAction<string>>;
+  setAccommodationTimeZone: Dispatch<SetStateAction<string>>;
   setCheckInDate: Dispatch<SetStateAction<Date>>;
   setCheckOutDate: Dispatch<SetStateAction<Date>>;
+  setCurrentTrip: Dispatch<SetStateAction<string>>;
+  setCurrentTripName: Dispatch<SetStateAction<string>>;
   setIsCheckIn: Dispatch<SetStateAction<boolean | undefined>>;
   setIsTime: Dispatch<SetStateAction<boolean | undefined>>;
   setShowDatePicker: Dispatch<SetStateAction<boolean>>;
-  setTimeZone: Dispatch<SetStateAction<SelectOption | null>>;
+  setTrips: Dispatch<SetStateAction<Trips>>;
   showDatePicker: boolean;
-  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
-  timeZone: SelectOption | null;
+  tripOptions: SelectOptions;
 }
 
 const AccommodationForm: FC<AccommodationFormProps> = ({
-  accommodationAirportCode,
+  accommodationAirport,
+  accommodationOptions,
+  accommodationTimeZone,
   checkInDate,
   checkOutDate,
+  currentTrip,
+  currentTripName,
+  handleAccommodationChange,
   isCheckIn,
   isTime,
-  setAccommodationAirportCode,
+  setAccommodationAirport,
   setCheckInDate,
   setCheckOutDate,
   setIsCheckIn,
   setIsTime,
+  setAccommodationTimeZone,
+  setCurrentTrip,
+  setCurrentTripName,
   setShowDatePicker,
-  setTimeZone,
+  setTrips,
   showDatePicker,
-  setAccommodations,
-  timeZone,
+  tripOptions,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -59,7 +76,15 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
     setShowModal(false);
   };
 
-  const isFormValid = accommodationAirportCode && timeZone;
+  const isFormValid = accommodationAirport;
+
+  const options = [
+    {
+      label: "New Trip",
+      value: "",
+    },
+    ...tripOptions,
+  ];
 
   return (
     <View style={styles.container}>
@@ -87,20 +112,60 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
             open={showDatePicker}
           />
           <View style={styles.row}>
-            <View style={styles.cell}></View>
-            <Text style={styles.cell}>Accom.</Text>
+            <Picker
+              dropdownIconColor="black"
+              style={styles.picker}
+              selectedValue={currentTrip}
+              onValueChange={(trip) => setCurrentTrip(trip)}
+            >
+              {options.map((option) => (
+                <Picker.Item
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                />
+              ))}
+            </Picker>
+          </View>
+          {!currentTrip && (
+            <>
+              <View style={styles.row}>
+                <Text style={styles.label}>Trip Name</Text>
+              </View>
+              <View style={styles.row}>
+                <TextInput
+                  autoCapitalize="words"
+                  onChange={(event) =>
+                    setCurrentTripName(event.nativeEvent.text)
+                  }
+                  style={[styles.fullWidth, styles.input]}
+                  value={currentTripName}
+                />
+              </View>
+            </>
+          )}
+          <View style={styles.row}>
+            <Text style={styles.label}>Nearest Airport</Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Airport Code</Text>
-            <TextInput
+            <Autocomplete
               autoCapitalize="characters"
-              onChangeText={(code) =>
-                setAirportCode(code, setAccommodationAirportCode)
-              }
-              placeholder="Origin airport code"
-              placeholderTextColor={"#0000"}
-              style={[styles.cell, styles.input]}
-              value={accommodationAirportCode}
+              handleInputChange={handleAccommodationChange}
+              onSelect={(item) => {
+                setAccommodationAirport(item.id);
+                setAccommodationTimeZone(item.meta.tz);
+              }}
+              options={accommodationOptions.map((option) => ({
+                id: option.iata?.trim() || option.icao,
+                title: option.name,
+                subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                meta: {
+                  tz: option.tz,
+                },
+              }))}
+              RenderItem={AirportOption}
+              style={[styles.fullWidth, styles.input]}
+              value={accommodationAirport}
             />
           </View>
           <View style={styles.row}>
@@ -171,15 +236,18 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
           <View style={styles.row}>
             <TouchableOpacity
               disabled={!isFormValid}
-              onPress={() =>
+              onPress={() => {
                 handleAddAccommodation({
-                  accommodationAirportCode,
+                  accommodationAirport,
+                  accommodationTimeZone,
                   checkInDate,
                   checkOutDate,
-                  timeZone,
-                  setAccommodations,
-                })
-              }
+                  currentTrip,
+                  currentTripName,
+                  setTrips,
+                });
+                handleCloseModal();
+              }}
               style={[
                 styles.button,
                 isFormValid ? styles.enabled : styles.disabled,
@@ -202,6 +270,8 @@ const styles = StyleSheet.create({
   addButton: {
     padding: 10,
     margin: 10,
+    marginBottom: 50,
+    position: "absolute",
   },
   content: {
     alignItems: "center",
@@ -211,16 +281,28 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 40,
     marginTop: "auto",
-    maxHeight: "75%",
+    maxHeight: "95%",
   },
   row: {
+    alignSelf: "stretch",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 10,
+    width: "100%",
   },
   cell: {
     height: 40,
     width: 100,
+    textAlign: "center",
+    textAlignVertical: "center",
+    marginHorizontal: 5,
+  },
+  fullWidth: {
+    alignSelf: "stretch",
+    height: 40,
+    minWidth: "100%",
+    maxWidth: "100%",
     textAlign: "center",
     textAlignVertical: "center",
     marginHorizontal: 5,
@@ -231,6 +313,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+    color: "black",
+  },
+  label: {
+    width: 100,
+    textAlign: "center",
+    textAlignVertical: "center",
+    marginHorizontal: 5,
+    marginTop: 10,
   },
   button: {
     borderRadius: 5,
@@ -242,6 +332,10 @@ const styles = StyleSheet.create({
   },
   disabled: {
     backgroundColor: "#CCCCCC",
+  },
+  picker: {
+    color: "black",
+    flex: 1,
   },
 });
 

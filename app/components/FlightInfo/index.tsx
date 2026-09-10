@@ -69,7 +69,7 @@ const FlightInfo: FC<FlightInfoProps> = ({
       <CloseButton
         handleCloseModal={() => {
           handleDeleteFlight({ flightId: flight.id, setTrips });
-          setSelectedTimeZone(trip.flights[0].origin.timeZone);
+          setSelectedTimeZone(trip.flights?.[0]?.origin.timeZone);
         }}
       />
     </View>

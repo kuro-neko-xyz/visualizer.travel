@@ -22,7 +22,7 @@ const handleDeleteFlight = ({
           flights,
         };
       })
-      .filter((trip) => trip.flights.length),
+      .filter((trip) => trip.flights?.length || trip.accommodations?.length),
   );
 };
 

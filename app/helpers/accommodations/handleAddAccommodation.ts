@@ -1,45 +1,80 @@
-import { Accommodations, Accommodation } from "@/models/Accommodation";
-import { SelectOption } from "@/models/SelectOption";
+import { Accommodation } from "@/models/Accommodation";
+import { Trips } from "@/models/Trip";
 import { randomUUID } from "expo-crypto";
 import { Dispatch, SetStateAction } from "react";
+import parseDateString from "../shared/parseDateString";
 
 interface HandleAddAccommodationProps {
-  accommodationAirportCode: string;
+  accommodationAirport: string;
+  accommodationTimeZone: string;
   checkInDate: Date;
   checkOutDate: Date;
-  timeZone: SelectOption | null;
-  setAccommodations: Dispatch<SetStateAction<Accommodations>>;
+  currentTrip: string;
+  currentTripName: string;
+  setTrips: Dispatch<SetStateAction<Trips>>;
 }
 
 const handleAddAccommodation = ({
-  accommodationAirportCode,
+  accommodationAirport,
+  accommodationTimeZone,
   checkInDate,
   checkOutDate,
-  timeZone,
-  setAccommodations,
+  currentTrip,
+  currentTripName,
+  setTrips,
 }: HandleAddAccommodationProps) => {
-  const checkInYear = checkInDate.getFullYear();
-  const checkInMonth = String(checkInDate.getMonth() + 1).padStart(2, "0");
-  const checkInDay = String(checkInDate.getDate()).padStart(2, "0");
-  const checkInHours = String(checkInDate.getHours()).padStart(2, "0");
-  const checkInMinutes = String(checkInDate.getMinutes()).padStart(2, "0");
+  const offsetInMinutes = new Date().getTimezoneOffset();
 
-  const checkOutYear = checkOutDate.getFullYear();
-  const checkOutMonth = String(checkOutDate.getMonth() + 1).padStart(2, "0");
-  const checkOutDay = String(checkOutDate.getDate()).padStart(2, "0");
-  const checkOutHours = String(checkOutDate.getHours()).padStart(2, "0");
-  const checkOutMinutes = String(checkOutDate.getMinutes()).padStart(2, "0");
+  const checkIn = parseDateString({
+    addOffset: false,
+    dummyDate: new Date(checkInDate.getTime() - offsetInMinutes * 60 * 1000),
+    timeZone: accommodationTimeZone,
+  });
+
+  const checkOut = parseDateString({
+    addOffset: false,
+    dummyDate: new Date(checkOutDate.getTime() - offsetInMinutes * 60 * 1000),
+    timeZone: accommodationTimeZone,
+  });
 
   const accommodationData: Accommodation = {
     id: randomUUID(),
-    airportCode: accommodationAirportCode,
-    checkIn: `${checkInYear}-${checkInMonth}-${checkInDay}T${checkInHours}:${checkInMinutes}:00${timeZone?.value}`,
-    checkOut: `${checkOutYear}-${checkOutMonth}-${checkOutDay}T${checkOutHours}:${checkOutMinutes}:00${timeZone?.value}`,
+    airportCode: accommodationAirport,
+    checkIn: checkIn.dateString,
+    checkOut: checkOut.dateString,
+    timeZone: accommodationTimeZone,
   };
-  setAccommodations((prevAccommodations: Accommodations) => [
-    ...prevAccommodations,
-    accommodationData,
-  ]);
+
+  if (currentTrip === "") {
+    setTrips((prevTrips: Trips) => [
+      ...prevTrips,
+      {
+        uuid: randomUUID(),
+        name: currentTripName,
+        accommodations: [accommodationData],
+        flights: [],
+      },
+    ]);
+  } else {
+    setTrips((prevTrips: Trips) => {
+      return prevTrips.map((trip) => {
+        if (trip.uuid !== currentTrip) {
+          return trip;
+        }
+
+        return {
+          ...trip,
+          accommodations: [
+            ...(trip.accommodations ?? []),
+            accommodationData,
+          ].sort(
+            (a, b) =>
+              new Date(a.checkIn).getTime() - new Date(a.checkOut).getTime(),
+          ),
+        };
+      });
+    });
+  }
 };
 
 export default handleAddAccommodation;

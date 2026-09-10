@@ -1,16 +1,17 @@
 import AccommodationForm from "@/components/AccommodationForm";
 import AccommodationsContainer from "@/components/AccommodationsContainer";
 import ContainerTab from "@/components/ContainerTab";
-import useStorage from "@/hooks/useStorage";
-import { SelectOption } from "@/models/SelectOption";
-import { useState } from "react";
+import { Airports } from "@/models/Airport";
+import { useContext, useState } from "react";
+import { TripContext } from "./_layout";
+import { Trip } from "@/models/Trip";
 
 export default function AccommodationsView() {
-  const [accommodations, setAccommodations] = useStorage("accommodations", []);
+  const { trips, setTrips } = useContext(TripContext);
 
-  const [airportCode, setAirportCode] = useState<string>("");
+  const [accommodationAirport, setAccommodationAirport] = useState("");
 
-  const [timeZone, setTimeZone] = useState<SelectOption | null>(null);
+  const [accommodationTimeZone, setAccommodationTimeZone] = useState("");
 
   const [checkInDate, setCheckInDate] = useState<Date>(new Date());
   const [checkOutDate, setCheckOutDate] = useState<Date>(new Date());
@@ -19,28 +20,57 @@ export default function AccommodationsView() {
   const [isCheckIn, setIsCheckIn] = useState<boolean>();
   const [isTime, setIsTime] = useState<boolean>();
 
+  const [accommodationOptions, setAccommodationOptions] = useState<Airports>(
+    [],
+  );
+
+  const [currentTrip, setCurrentTrip] = useState("");
+  const [currentTripName, setCurrentTripName] = useState("");
+
+  const handleAccommodationChange = async (search: string) => {
+    if (!search) {
+      setAccommodationOptions([]);
+      setAccommodationAirport("");
+    }
+
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}airports?search=${search}`,
+    );
+
+    const data = await response.json();
+
+    setAccommodationOptions(data);
+  };
+
   return (
     <ContainerTab>
-      <AccommodationsContainer
-        accommodations={accommodations}
-        setAccommodations={setAccommodations}
-      />
+      <AccommodationsContainer trips={trips} setTrips={setTrips} />
       <AccommodationForm
-        accommodationAirportCode={airportCode}
+        accommodationAirport={accommodationAirport}
+        accommodationOptions={accommodationOptions}
+        accommodationTimeZone={accommodationTimeZone}
         checkInDate={checkInDate}
         checkOutDate={checkOutDate}
+        currentTrip={currentTrip}
+        currentTripName={currentTripName}
+        handleAccommodationChange={handleAccommodationChange}
         isCheckIn={isCheckIn}
         isTime={isTime}
-        setAccommodationAirportCode={setAirportCode}
+        setAccommodationAirport={setAccommodationAirport}
+        setAccommodationTimeZone={setAccommodationTimeZone}
         setCheckInDate={setCheckInDate}
         setCheckOutDate={setCheckOutDate}
+        setCurrentTrip={setCurrentTrip}
+        setCurrentTripName={setCurrentTripName}
         setIsCheckIn={setIsCheckIn}
         setIsTime={setIsTime}
         setShowDatePicker={setShowDatePicker}
-        setTimeZone={setTimeZone}
+        setTrips={setTrips}
         showDatePicker={showDatePicker}
-        timeZone={timeZone}
-        setAccommodations={setAccommodations}
+        tripOptions={trips.map((trip: Trip) => ({
+          label: trip.name,
+          value: trip.uuid,
+        }))}
       />
     </ContainerTab>
   );
