@@ -1,4 +1,5 @@
 import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFromCode";
+import { Accommodations } from "@/models/Accommodation";
 import { ItineraryElement } from "@/models/Itinerary";
 import TimeFrame from "@/models/TimeFrame";
 import { getTimeZones } from "@vvo/tzdb";
@@ -12,6 +13,7 @@ import {
 } from "react-native";
 
 interface ItineraryViewProps {
+  accommodations?: Accommodations;
   initialTimeZone: string;
   itinerary: ItineraryElement[];
   timeFrame: TimeFrame;
@@ -21,6 +23,7 @@ interface ItineraryViewProps {
 const DAY_HEIGHT = 240;
 
 const ItineraryView: FC<ItineraryViewProps> = ({
+  accommodations,
   initialTimeZone,
   itinerary,
   timeFrame,
@@ -54,6 +57,10 @@ const ItineraryView: FC<ItineraryViewProps> = ({
 
   return (
     <View style={[styles.container, { minHeight: height - 280 }]}>
+      <View style={styles.header}>
+        <Text style={styles.headerLabel}>🏨</Text>
+        <Text style={styles.headerLabel}>✈️</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.itineraryContainer}>
           <View
@@ -102,6 +109,44 @@ const ItineraryView: FC<ItineraryViewProps> = ({
             }}
           />
         </View>
+        {accommodations && (
+          <View style={styles.accommodationsContainer}>
+            {accommodations.map((accommodation) => {
+              const padding =
+                ((new Date(accommodation.checkIn).getTime() -
+                  itinerary[0].startDate.getTime()) *
+                  DAY_HEIGHT) /
+                86400000;
+
+              const height =
+                ((new Date(accommodation.checkOut).getTime() -
+                  new Date(accommodation.checkIn).getTime()) *
+                  DAY_HEIGHT) /
+                86400000;
+
+              return (
+                <View
+                  key={accommodation.id}
+                  style={{
+                    backgroundColor: generateRandomColorFromCode(
+                      accommodation.airportCode,
+                    ),
+                    minHeight: height,
+                    maxHeight: height,
+                    position: "absolute",
+                    top: displacement + padding,
+                    overflowY: "hidden",
+                    width: 40,
+                  }}
+                >
+                  <Text style={styles.locationLabel}>
+                    {accommodation.airportCode}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
         <View>
           {[...timeFrame].map((timeFrameElement) => {
             return (
@@ -215,8 +260,25 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     paddingBottom: 20,
   },
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    minWidth: "90%",
+  },
+  headerLabel: {
+    width: 40,
+    textAlign: "center",
+  },
   itineraryContainer: {
     position: "absolute",
+    display: "flex",
+    alignItems: "flex-end",
+    width: "90%",
+  },
+  accommodationsContainer: {
+    position: "absolute",
+    right: 60,
     display: "flex",
     alignItems: "flex-end",
     width: "90%",
