@@ -16,12 +16,16 @@ export default function ItineraryView() {
   const { trips } = useContext(TripContext);
 
   const [selectedTrip, setSelectedTrip] = useState(trips[0]?.uuid);
-  const [initialTimeZone, setInitialTimeZone] = useState(
-    trips[0]?.flights?.[0]?.origin.timeZone,
-  );
+  const [initialTimeZone, setInitialTimeZone] = useState<string>();
   const [flights, setFlights] = useState<Flights>();
   const [timeFrame, setTimeFrame] = useState<TimeFrame | null>();
   const [itinerary, setItinerary] = useState<ItineraryElement[] | null>();
+
+  useEffect(() => {
+    if (trips.length > 0 && !initialTimeZone) {
+      setInitialTimeZone(trips[0]?.flights?.[0]?.origin.timeZone);
+    }
+  }, [trips, initialTimeZone]);
 
   const options: SelectOptions = useMemo(() => {
     return trips.map((trip: Trip) => ({
@@ -149,12 +153,14 @@ export default function ItineraryView() {
             ))}
           </Picker>
         </View>
-        <ItineraryContainer
-          initialTimeZone={initialTimeZone}
-          itinerary={itinerary}
-          timeFrame={timeFrame}
-          timeZone={selectedTimeZone}
-        />
+        {initialTimeZone && (
+          <ItineraryContainer
+            initialTimeZone={initialTimeZone}
+            itinerary={itinerary}
+            timeFrame={timeFrame}
+            timeZone={selectedTimeZone}
+          />
+        )}
       </View>
     </ContainerTab>
   );
