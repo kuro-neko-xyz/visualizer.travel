@@ -1,9 +1,14 @@
 import { Stack } from "expo-router";
-import { Platform } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import * as Keychain from "react-native-keychain";
 import crypto from "react-native-quick-crypto";
 import { createMMKV } from "react-native-mmkv";
 import { useEffect } from "react";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 
 // const nukeKeychain = async () => {
 //   const succesfullyDeleted = await Keychain.resetGenericPassword({
@@ -77,9 +82,14 @@ export default function RootLayout() {
     authenticateUser();
   }, []);
 
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
+
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <ThemeProvider value={isLight ? DefaultTheme : DarkTheme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </ThemeProvider>
   );
 }

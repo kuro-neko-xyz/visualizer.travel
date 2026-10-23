@@ -3,9 +3,11 @@ import { ComponentProps, FC, useState } from "react";
 import {
   ScrollView,
   StyleProp,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  useColorScheme,
   View,
   ViewStyle,
 } from "react-native";
@@ -34,6 +36,9 @@ const Autocomplete: FC<AutocompleteProps> = ({
 }) => {
   const [inputMode, setInputMode] = useState(true);
 
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
+
   if (!RenderItem) {
     return <></>;
   }
@@ -52,7 +57,9 @@ const Autocomplete: FC<AutocompleteProps> = ({
           onPress={() => setInputMode(true)}
           style={style as StyleProp<ViewStyle>}
         >
-          <Text>{value}</Text>
+          <Text style={isLight ? styles.labelLight : styles.labelDark}>
+            {value}
+          </Text>
         </TouchableOpacity>
       )}
       {inputMode && (
@@ -77,3 +84,12 @@ const Autocomplete: FC<AutocompleteProps> = ({
 };
 
 export default Autocomplete;
+
+const styles = StyleSheet.create({
+  labelLight: {
+    color: "black",
+  },
+  labelDark: {
+    color: "white",
+  },
+});
