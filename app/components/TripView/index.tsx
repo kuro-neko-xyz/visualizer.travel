@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 import FlightInfo from "../FlightInfo";
 import { Trips, Trip } from "@/models/Trip";
 import { Picker } from "@react-native-picker/picker";
@@ -12,6 +12,9 @@ interface TripViewProps {
 }
 
 const TripView: FC<TripViewProps> = ({ mode = "flights", setTrips, trip }) => {
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
+
   const [selectedTimezone, setSelectedTimeZone] = useState(
     mode === "flights"
       ? (trip?.flights?.[0]?.origin.timeZone ??
@@ -36,12 +39,27 @@ const TripView: FC<TripViewProps> = ({ mode = "flights", setTrips, trip }) => {
 
   return (
     <View key={trip.uuid}>
-      <Text style={[styles.label, styles.header]}>{trip.name}</Text>
+      <Text
+        style={[
+          styles.label,
+          styles.header,
+          isLight ? styles.labelLight : styles.labelDark,
+        ]}
+      >
+        {trip.name}
+      </Text>
       <View style={styles.row}>
-        <Text style={styles.label}>Time Zone:</Text>
+        <Text
+          style={[styles.label, isLight ? styles.labelLight : styles.labelDark]}
+        >
+          Time Zone:
+        </Text>
         <Picker
-          dropdownIconColor="black"
-          style={styles.picker}
+          dropdownIconColor={isLight ? "black" : "white"}
+          style={[
+            styles.picker,
+            isLight ? styles.pickerLight : styles.pickerDark,
+          ]}
           selectedValue={selectedTimezone}
           onValueChange={(tz) => setSelectedTimeZone(tz)}
         >
@@ -91,6 +109,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
   },
+  labelLight: {
+    color: "black",
+  },
+  labelDark: {
+    color: "white",
+  },
   header: {
     fontWeight: "bold",
     fontSize: 20,
@@ -115,8 +139,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   picker: {
-    color: "black",
     flex: 1,
+  },
+  pickerLight: {
+    color: "black",
+  },
+  pickerDark: {
+    color: "white",
   },
 });
 
