@@ -8,9 +8,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  useColorScheme,
   useWindowDimensions,
   View,
 } from "react-native";
+import TimeScale from "../TimeScale";
 
 interface ItineraryViewProps {
   accommodations?: Accommodations;
@@ -20,7 +22,7 @@ interface ItineraryViewProps {
   timeZone: string;
 }
 
-const DAY_HEIGHT = 240;
+export const DAY_HEIGHT = 240;
 
 const ItineraryView: FC<ItineraryViewProps> = ({
   accommodations,
@@ -30,6 +32,9 @@ const ItineraryView: FC<ItineraryViewProps> = ({
   timeZone,
 }) => {
   const { height } = useWindowDimensions();
+
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
 
   const timeZones = getTimeZones();
 
@@ -56,7 +61,14 @@ const ItineraryView: FC<ItineraryViewProps> = ({
   );
 
   return (
-    <View style={[styles.container, { minHeight: height - 280 }]}>
+    <View
+      style={[
+        styles.container,
+        isLight ? styles.containerLight : styles.containerDark,
+        ,
+        { minHeight: height - 290 },
+      ]}
+    >
       <View style={styles.header}>
         <Text style={styles.headerLabel}>🏨</Text>
         <Text style={styles.headerLabel}>✈️</Text>
@@ -154,8 +166,15 @@ const ItineraryView: FC<ItineraryViewProps> = ({
                 key={timeFrameElement.toISOString()}
                 style={styles.timeFrameElementContainer}
               >
-                <View style={styles.timeFrameElement}>
-                  <Text>
+                <View
+                  style={[
+                    styles.timeFrameElement,
+                    isLight
+                      ? styles.timeFrameElementLight
+                      : styles.timeFrameElementDark,
+                  ]}
+                >
+                  <Text style={isLight ? styles.labelLight : styles.labelDark}>
                     {timeFrameElement.toLocaleString([], {
                       timeZone,
                       weekday: "long",
@@ -165,80 +184,7 @@ const ItineraryView: FC<ItineraryViewProps> = ({
                     })}
                   </Text>
                 </View>
-                <View style={styles.timeScale}>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>00</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>01</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>02</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>03</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>04</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>05</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>06</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>07</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>08</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>09</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>10</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>11</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>12</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>13</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>14</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>15</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>16</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>17</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>18</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>19</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>20</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>21</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>22</Text>
-                  </View>
-                  <View style={styles.timeScaleElement}>
-                    <Text style={styles.timeScaleLabel}>23</Text>
-                  </View>
-                </View>
+                <TimeScale />
               </View>
             );
           })}
@@ -255,10 +201,15 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     maxHeight: "70%",
-    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
     minWidth: "100%",
     maxWidth: "100%",
     paddingBottom: 20,
+  },
+  containerLight: {
+    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
+  },
+  containerDark: {
+    boxShadow: "0px -50px 50px -50px #555555 inset",
   },
   header: {
     display: "flex",
@@ -269,6 +220,12 @@ const styles = StyleSheet.create({
   headerLabel: {
     width: 40,
     textAlign: "center",
+  },
+  labelLight: {
+    color: "black",
+  },
+  labelDark: {
+    color: "white",
   },
   itineraryContainer: {
     position: "absolute",
@@ -307,6 +264,12 @@ const styles = StyleSheet.create({
     minWidth: "90%",
     maxWidth: "90%",
     height: DAY_HEIGHT,
+  },
+  timeFrameElementLight: {
+    borderColor: "black",
+  },
+  timeFrameElementDark: {
+    borderColor: "white",
   },
   timeScale: {
     width: 10,

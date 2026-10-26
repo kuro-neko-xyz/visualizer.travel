@@ -2,7 +2,7 @@ import ContainerTab from "@/components/ContainerTab";
 import getTimeFrame from "@/helpers/itinerary/getTimeFrame";
 import transformItinerary from "@/helpers/itinerary/transformItinerary";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 import ItineraryContainer from "@/components/ItineraryView";
 import { TripContext } from "./_layout";
 import { Flights, Flight } from "@/models/Flight";
@@ -22,6 +22,9 @@ export default function ItineraryView() {
   const [accommodations, setAccommodations] = useState<Accommodations>();
   const [timeFrame, setTimeFrame] = useState<TimeFrame | null>();
   const [itinerary, setItinerary] = useState<ItineraryElement[] | null>();
+
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
 
   useEffect(() => {
     if (trips.length > 0 && !initialTimeZone) {
@@ -92,7 +95,9 @@ export default function ItineraryView() {
   if (!trips || !trips.length) {
     return (
       <ContainerTab>
-        <Text>No trips available to display the itinerary.</Text>
+        <Text style={isLight ? styles.labelLight : styles.labelDark}>
+          No trips available to display the itinerary.
+        </Text>
       </ContainerTab>
     );
   }
@@ -100,7 +105,9 @@ export default function ItineraryView() {
   if (!flights || !flights.length) {
     return (
       <ContainerTab>
-        <Text>No flights available to display the itinerary.</Text>
+        <Text style={isLight ? styles.labelLight : styles.labelDark}>
+          No flights available to display the itinerary.
+        </Text>
       </ContainerTab>
     );
   }
@@ -108,7 +115,9 @@ export default function ItineraryView() {
   if (!timeFrame || !itinerary) {
     return (
       <ContainerTab>
-        <Text>Loading...</Text>
+        <Text style={isLight ? styles.labelLight : styles.labelDark}>
+          Loading...
+        </Text>
       </ContainerTab>
     );
   }
@@ -117,10 +126,20 @@ export default function ItineraryView() {
     <ContainerTab>
       <View style={styles.container}>
         <View style={styles.row}>
-          <Text style={styles.label}>Trip:</Text>
+          <Text
+            style={[
+              styles.label,
+              isLight ? styles.labelLight : styles.labelDark,
+            ]}
+          >
+            Trip:
+          </Text>
           <Picker
-            dropdownIconColor="black"
-            style={styles.picker}
+            dropdownIconColor={isLight ? "black" : "white"}
+            style={[
+              styles.picker,
+              isLight ? styles.labelLight : styles.labelDark,
+            ]}
             selectedValue={selectedTrip}
             onValueChange={(trip) => {
               setSelectedTrip(trip);
@@ -143,10 +162,20 @@ export default function ItineraryView() {
           </Picker>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Time Zone:</Text>
+          <Text
+            style={[
+              styles.label,
+              isLight ? styles.labelLight : styles.labelDark,
+            ]}
+          >
+            Time Zone:
+          </Text>
           <Picker
-            dropdownIconColor="black"
-            style={styles.picker}
+            dropdownIconColor={isLight ? "black" : "white"}
+            style={[
+              styles.picker,
+              isLight ? styles.labelLight : styles.labelDark,
+            ]}
             selectedValue={selectedTimeZone}
             onValueChange={(tz) => setSelectedTimeZone(tz)}
           >
@@ -190,6 +219,12 @@ const styles = StyleSheet.create({
   label: {
     textAlign: "center",
     fontSize: 16,
+  },
+  labelLight: {
+    color: "black",
+  },
+  labelDark: {
+    color: "white",
   },
   select: {
     borderStyle: "solid",

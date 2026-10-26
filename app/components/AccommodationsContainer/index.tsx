@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 import { Trips } from "@/models/Trip";
 import TripView from "../TripView";
 
@@ -12,8 +12,16 @@ const AccommodationsContainer: FC<AccommodationContainerProps> = ({
   trips,
   setTrips,
 }) => {
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        isLight ? styles.containerLight : styles.containerDark,
+      ]}
+    >
       <ScrollView contentContainerStyle={styles.content}>
         {trips.map((trip) => (
           <TripView
@@ -30,9 +38,14 @@ const AccommodationsContainer: FC<AccommodationContainerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
     minWidth: "100%",
     maxWidth: "100%",
+  },
+  containerLight: {
+    boxShadow: "0px -50px 50px -50px #AAAAAA inset",
+  },
+  containerDark: {
+    boxShadow: "0px -50px 50px -50px #555555 inset",
   },
   content: {
     padding: 20,
