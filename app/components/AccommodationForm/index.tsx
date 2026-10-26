@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import CloseButton from "../CloseButton";
@@ -68,6 +69,9 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
 
+  const scheme = useColorScheme();
+  const isLight = scheme === "light";
+
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -89,10 +93,17 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={handleOpenModal}>
-        <Text>➕ Add Accommodation</Text>
+        <Text style={isLight ? styles.labelLight : styles.labelDark}>
+          ➕ Add Accommodation
+        </Text>
       </TouchableOpacity>
       <Modal animationType="slide" transparent visible={showModal}>
-        <View style={styles.content}>
+        <View
+          style={[
+            styles.content,
+            isLight ? styles.contentLight : styles.contentDark,
+          ]}
+        >
           <CloseButton handleCloseModal={handleCloseModal} wide />
           <DatePicker
             date={isCheckIn ? checkInDate : checkOutDate}
@@ -113,8 +124,11 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
           />
           <View style={styles.row}>
             <Picker
-              dropdownIconColor="black"
-              style={styles.picker}
+              dropdownIconColor={isLight ? "black" : "white"}
+              style={[
+                styles.picker,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
               selectedValue={currentTrip}
               onValueChange={(trip) => setCurrentTrip(trip)}
             >
@@ -130,7 +144,14 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
           {!currentTrip && (
             <>
               <View style={styles.row}>
-                <Text style={styles.label}>Trip Name</Text>
+                <Text
+                  style={[
+                    styles.label,
+                    isLight ? styles.labelLight : styles.labelDark,
+                  ]}
+                >
+                  Trip Name
+                </Text>
               </View>
               <View style={styles.row}>
                 <TextInput
@@ -138,14 +159,25 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
                   onChange={(event) =>
                     setCurrentTripName(event.nativeEvent.text)
                   }
-                  style={[styles.fullWidth, styles.input]}
+                  style={[
+                    styles.fullWidth,
+                    styles.input,
+                    isLight ? styles.inputLight : styles.inputDark,
+                  ]}
                   value={currentTripName}
                 />
               </View>
             </>
           )}
           <View style={styles.row}>
-            <Text style={styles.label}>Nearest Airport</Text>
+            <Text
+              style={[
+                styles.label,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              Nearest Airport
+            </Text>
           </View>
           <View style={styles.row}>
             <Autocomplete
@@ -164,37 +196,72 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
                 },
               }))}
               RenderItem={AirportOption}
-              style={[styles.fullWidth, styles.input]}
+              style={[
+                styles.fullWidth,
+                styles.input,
+                isLight ? styles.inputLight : styles.inputDark,
+              ]}
               value={accommodationAirport}
             />
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Time Zone</Text>
+            <Text
+              style={[
+                styles.cell,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              Time Zone
+            </Text>
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Check-in Date</Text>
+            <Text
+              style={[
+                styles.cell,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              Check-in Date
+            </Text>
             <TouchableOpacity
-              style={[styles.cell, styles.input]}
+              style={[
+                styles.cell,
+                styles.input,
+                isLight ? styles.inputLight : styles.inputDark,
+              ]}
               onPress={() => {
                 setIsCheckIn(true);
                 setIsTime(false);
                 setShowDatePicker(true);
               }}
             >
-              <Text>{checkInDate.toLocaleDateString()}</Text>
+              <Text style={isLight ? styles.labelLight : styles.labelDark}>
+                {checkInDate.toLocaleDateString()}
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Check-in Time</Text>
+            <Text
+              style={[
+                styles.cell,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              Check-in Time
+            </Text>
             <TouchableOpacity
-              style={[styles.cell, styles.input]}
+              style={[
+                styles.cell,
+                styles.input,
+                isLight ? styles.inputLight : styles.inputDark,
+              ]}
               onPress={() => {
                 setIsCheckIn(true);
                 setIsTime(true);
                 setShowDatePicker(true);
               }}
             >
-              <Text>
+              <Text style={isLight ? styles.labelLight : styles.labelDark}>
                 {checkInDate.toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -203,29 +270,53 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Check-out Date</Text>
+            <Text
+              style={[
+                styles.cell,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              Check-out Date
+            </Text>
             <TouchableOpacity
-              style={[styles.cell, styles.input]}
+              style={[
+                styles.cell,
+                styles.input,
+                isLight ? styles.inputLight : styles.inputDark,
+              ]}
               onPress={() => {
                 setIsCheckIn(false);
                 setIsTime(false);
                 setShowDatePicker(true);
               }}
             >
-              <Text>{checkOutDate.toLocaleDateString()}</Text>
+              <Text style={isLight ? styles.labelLight : styles.labelDark}>
+                {checkOutDate.toLocaleDateString()}
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={styles.row}>
-            <Text style={styles.cell}>Check-out Time</Text>
+            <Text
+              style={[
+                styles.cell,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              Check-out Time
+            </Text>
             <TouchableOpacity
-              style={[styles.cell, styles.input]}
+              style={[
+                styles.cell,
+                styles.input,
+                isLight ? styles.inputLight : styles.inputDark,
+              ]}
               onPress={() => {
                 setIsCheckIn(false);
                 setIsTime(true);
                 setShowDatePicker(true);
               }}
             >
-              <Text>
+              <Text style={isLight ? styles.labelLight : styles.labelDark}>
                 {checkOutDate.toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -273,15 +364,26 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     position: "absolute",
   },
+  labelLight: {
+    color: "black",
+  },
+  labelDark: {
+    color: "white",
+  },
   content: {
     alignItems: "center",
-    backgroundColor: "white",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,
     padding: 40,
     marginTop: "auto",
     maxHeight: "95%",
+  },
+  contentLight: {
+    backgroundColor: "white",
+  },
+  contentDark: {
+    backgroundColor: "#1D1D1F",
   },
   row: {
     alignSelf: "stretch",
@@ -313,7 +415,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+  },
+  inputLight: {
     color: "black",
+    borderColor: "black",
+  },
+  inputDark: {
+    color: "white",
+    borderColor: "white",
   },
   label: {
     width: 100,
