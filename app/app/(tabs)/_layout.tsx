@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import useStorage from "@/hooks/useStorage";
 import { createContext, Dispatch, SetStateAction } from "react";
 import { Trips } from "@/models/Trip";
+import SettingsModal from "@/components/SettingsModal";
 
 interface TripContextType {
   trips: Trips;
@@ -19,6 +20,7 @@ export default function TabLayout() {
 
   return (
     <TripContext.Provider value={{ trips, setTrips }}>
+      <SettingsModal setTrips={setTrips} />
       <Tabs initialRouteName="flights" screenOptions={{ headerShown: false }}>
         <Tabs.Screen
           name="flights"
