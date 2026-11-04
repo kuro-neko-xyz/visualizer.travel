@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 import TimeScale from "../TimeScale";
+import { DAY_HEIGHT } from "@/constants/layout";
 
 interface ItineraryViewProps {
   accommodations?: Accommodations;
@@ -21,8 +22,6 @@ interface ItineraryViewProps {
   timeFrame: TimeFrame;
   timeZone: string;
 }
-
-export const DAY_HEIGHT = 240;
 
 const ItineraryView: FC<ItineraryViewProps> = ({
   accommodations,

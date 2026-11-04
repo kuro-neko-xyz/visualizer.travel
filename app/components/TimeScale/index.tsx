@@ -1,6 +1,6 @@
+import { DAY_HEIGHT } from "@/constants/layout";
 import { FC } from "react";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
-import { DAY_HEIGHT } from "../ItineraryView";
 
 const TimeScale: FC = () => {
   const scheme = useColorScheme();
