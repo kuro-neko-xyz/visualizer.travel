@@ -4,7 +4,8 @@ import ContainerTab from "@/components/ContainerTab";
 import FlightsContainer from "@/components/FlightsContainer";
 import { TripContext } from "./_layout";
 import { Trip } from "@/models/Trip";
-import { Airports } from "@/models/Airport";
+import searchAirports from "@/helpers/flights/searchAirports";
+import { AirportSearchResult } from "@/models/AirportSearch";
 
 const FlightsView: FC = () => {
   const { trips, setTrips } = useContext(TripContext);
@@ -22,38 +23,43 @@ const FlightsView: FC = () => {
   const [isDeparture, setIsDeparture] = useState<boolean>();
   const [isTime, setIsTime] = useState<boolean>();
 
-  const [originOptions, setOriginOptions] = useState<Airports>([]);
-  const [destinationOptions, setDestinationOptions] = useState<Airports>([]);
+  const [originOptions, setOriginOptions] = useState<AirportSearchResult>({
+    ok: true,
+    airports: [],
+  });
+  const [destinationOptions, setDestinationOptions] =
+    useState<AirportSearchResult>({
+      ok: true,
+      airports: [],
+    });
 
   const [currentTrip, setCurrentTrip] = useState("");
   const [currentTripName, setCurrentTripName] = useState("");
 
   const handleOriginChange = async (search: string) => {
     if (!search) {
-      setOriginOptions([]);
+      setOriginOptions({
+        ok: true,
+        airports: [],
+      });
       setOriginAirport("");
     }
 
-    const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}airports?search=${search}`,
-    );
-
-    const data = await response.json();
+    const data = await searchAirports(search);
 
     setOriginOptions(data);
   };
 
   const handleDestinationChange = async (search: string) => {
     if (!search) {
-      setDestinationOptions([]);
+      setDestinationOptions({
+        ok: true,
+        airports: [],
+      });
       setDestinationAirport("");
     }
 
-    const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}airports?search=${search}`,
-    );
-
-    const data = await response.json();
+    const data = await searchAirports(search);
 
     setDestinationOptions(data);
   };

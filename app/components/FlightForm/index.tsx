@@ -13,10 +13,10 @@ import handleAddFlight from "@/helpers/flights/handleAddFlight";
 import CloseButton from "../CloseButton";
 import Autocomplete from "../Autocomplete";
 import AirportOption from "../AirportOption";
-import { Airports } from "@/models/Airport";
 import { SelectOptions } from "@/models/SelectOption";
 import { Trips } from "@/models/Trip";
 import { Picker } from "@react-native-picker/picker";
+import { AirportSearchResult } from "@/models/AirportSearch";
 
 interface FlightFormProps {
   arrivalDate: Date;
@@ -24,14 +24,14 @@ interface FlightFormProps {
   currentTripName: string;
   departureDate: Date;
   destinationAirport: string;
-  destinationOptions: Airports;
+  destinationOptions: AirportSearchResult;
   destinationTimeZone: string;
   handleDestinationChange: (search: string) => void;
   handleOriginChange: (search: string) => void;
   isDeparture?: boolean;
   isTime?: boolean;
   originAirport: string;
-  originOptions: Airports;
+  originOptions: AirportSearchResult;
   originTimeZone: string;
   setArrivalDate: Dispatch<SetStateAction<Date>>;
   setCurrentTrip: Dispatch<SetStateAction<string>>;
@@ -209,14 +209,18 @@ const FlightForm: FC<FlightFormProps> = ({
                 setOriginAirport(item.id);
                 setOriginTimeZone(item.meta.tz);
               }}
-              options={originOptions.map((option) => ({
-                id: option.iata?.trim() || option.icao,
-                title: option.name,
-                subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
-                meta: {
-                  tz: option.tz,
-                },
-              }))}
+              options={
+                originOptions.ok
+                  ? originOptions.airports.map((option) => ({
+                      id: option.iata?.trim() || option.icao,
+                      title: option.name,
+                      subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                      meta: {
+                        tz: option.tz,
+                      },
+                    }))
+                  : []
+              }
               RenderItem={AirportOption}
               style={[
                 styles.fullWidth,
@@ -226,6 +230,16 @@ const FlightForm: FC<FlightFormProps> = ({
               value={originAirport}
             />
           </View>
+          {!originOptions.ok && (
+            <Text
+              style={[
+                styles.message,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              {originOptions.error?.message}
+            </Text>
+          )}
           {originAirport && (
             <>
               <View style={styles.row}>
@@ -246,14 +260,18 @@ const FlightForm: FC<FlightFormProps> = ({
                     setDestinationAirport(item.id);
                     setDestinationTimeZone(item.meta.tz);
                   }}
-                  options={destinationOptions.map((option) => ({
-                    id: option.iata?.trim() || option.icao,
-                    title: option.name,
-                    subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
-                    meta: {
-                      tz: option.tz,
-                    },
-                  }))}
+                  options={
+                    destinationOptions.ok
+                      ? destinationOptions.airports.map((option) => ({
+                          id: option.iata?.trim() || option.icao,
+                          title: option.name,
+                          subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                          meta: {
+                            tz: option.tz,
+                          },
+                        }))
+                      : []
+                  }
                   RenderItem={AirportOption}
                   style={[
                     styles.fullWidth,
@@ -263,6 +281,16 @@ const FlightForm: FC<FlightFormProps> = ({
                   value={destinationAirport}
                 />
               </View>
+              {!destinationOptions.ok && (
+                <Text
+                  style={[
+                    styles.message,
+                    isLight ? styles.labelLight : styles.labelDark,
+                  ]}
+                >
+                  {destinationOptions.error?.message}
+                </Text>
+              )}
             </>
           )}
           <View style={styles.row}>
@@ -465,6 +493,13 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     marginHorizontal: 5,
     marginTop: 10,
+  },
+  message: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    margin: 10,
+    marginBottom: 20,
+    fontWeight: "bold",
   },
   button: {
     borderRadius: 5,

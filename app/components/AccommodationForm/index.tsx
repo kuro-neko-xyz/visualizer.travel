@@ -12,15 +12,15 @@ import CloseButton from "../CloseButton";
 import DatePicker from "react-native-date-picker";
 import handleAddAccommodation from "@/helpers/accommodations/handleAddAccommodation";
 import Autocomplete from "../Autocomplete";
-import { Airports } from "@/models/Airport";
 import AirportOption from "../AirportOption";
 import { Picker } from "@react-native-picker/picker";
 import { SelectOptions } from "@/models/SelectOption";
 import { Trips } from "@/models/Trip";
+import { AirportSearchResult } from "@/models/AirportSearch";
 
 interface AccommodationFormProps {
   accommodationAirport: string;
-  accommodationOptions: Airports;
+  accommodationOptions: AirportSearchResult;
   accommodationTimeZone: string;
   checkInDate: Date;
   checkOutDate: Date;
@@ -187,14 +187,18 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
                 setAccommodationAirport(item.id);
                 setAccommodationTimeZone(item.meta.tz);
               }}
-              options={accommodationOptions.map((option) => ({
-                id: option.iata?.trim() || option.icao,
-                title: option.name,
-                subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
-                meta: {
-                  tz: option.tz,
-                },
-              }))}
+              options={
+                accommodationOptions.ok
+                  ? accommodationOptions.airports.map((option) => ({
+                      id: option.iata?.trim() || option.icao,
+                      title: option.name,
+                      subtitle: `${option.iata?.trim() ? option.iata + " | " : ""}${option.icao} | ${option.city} | ${option.tz}`,
+                      meta: {
+                        tz: option.tz,
+                      },
+                    }))
+                  : []
+              }
               RenderItem={AirportOption}
               style={[
                 styles.fullWidth,
@@ -204,6 +208,16 @@ const AccommodationForm: FC<AccommodationFormProps> = ({
               value={accommodationAirport}
             />
           </View>
+          {!accommodationOptions.ok && (
+            <Text
+              style={[
+                styles.message,
+                isLight ? styles.labelLight : styles.labelDark,
+              ]}
+            >
+              {accommodationOptions.error?.message}
+            </Text>
+          )}
           <View style={styles.row}>
             <Text
               style={[
@@ -430,6 +444,13 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     marginHorizontal: 5,
     marginTop: 10,
+  },
+  message: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    margin: 10,
+    marginBottom: 20,
+    fontWeight: "bold",
   },
   button: {
     borderRadius: 5,
