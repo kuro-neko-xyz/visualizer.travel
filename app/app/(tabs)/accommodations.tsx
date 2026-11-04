@@ -1,10 +1,11 @@
 import AccommodationForm from "@/components/AccommodationForm";
 import AccommodationsContainer from "@/components/AccommodationsContainer";
 import ContainerTab from "@/components/ContainerTab";
-import { Airports } from "@/models/Airport";
 import { useContext, useState } from "react";
 import { TripContext } from "./_layout";
 import { Trip } from "@/models/Trip";
+import searchAirports from "@/helpers/flights/searchAirports";
+import { AirportSearchResult } from "@/models/AirportSearch";
 
 export default function AccommodationsView() {
   const { trips, setTrips } = useContext(TripContext);
@@ -20,24 +21,25 @@ export default function AccommodationsView() {
   const [isCheckIn, setIsCheckIn] = useState<boolean>();
   const [isTime, setIsTime] = useState<boolean>();
 
-  const [accommodationOptions, setAccommodationOptions] = useState<Airports>(
-    [],
-  );
+  const [accommodationOptions, setAccommodationOptions] =
+    useState<AirportSearchResult>({
+      ok: true,
+      airports: [],
+    });
 
   const [currentTrip, setCurrentTrip] = useState("");
   const [currentTripName, setCurrentTripName] = useState("");
 
   const handleAccommodationChange = async (search: string) => {
     if (!search) {
-      setAccommodationOptions([]);
+      setAccommodationOptions({
+        ok: true,
+        airports: [],
+      });
       setAccommodationAirport("");
     }
 
-    const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}airports?search=${search}`,
-    );
-
-    const data = await response.json();
+    const data = await searchAirports(search);
 
     setAccommodationOptions(data);
   };
