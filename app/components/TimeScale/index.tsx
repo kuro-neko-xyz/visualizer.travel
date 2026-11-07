@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   timeScaleLabel: {
-    fontSize: 5,
+    fontSize: 4,
     paddingLeft: 2,
   },
 });

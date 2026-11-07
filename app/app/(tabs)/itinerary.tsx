@@ -76,11 +76,13 @@ export default function ItineraryView() {
   useEffect(() => {
     const calculateTimeFrame = () => {
       if (flights) {
-        setTimeFrame(getTimeFrame(flights));
+        setTimeFrame(
+          getTimeFrame(flights, selectedTimeZone ?? initialTimeZone),
+        );
       }
     };
     calculateTimeFrame();
-  }, [flights]);
+  }, [flights, selectedTimeZone, initialTimeZone]);
 
   useEffect(() => {
     const calculateItinerary = () => {
@@ -188,15 +190,12 @@ export default function ItineraryView() {
             ))}
           </Picker>
         </View>
-        {initialTimeZone && (
-          <ItineraryContainer
-            accommodations={accommodations}
-            initialTimeZone={initialTimeZone}
-            itinerary={itinerary}
-            timeFrame={timeFrame}
-            timeZone={selectedTimeZone}
-          />
-        )}
+        <ItineraryContainer
+          accommodations={accommodations}
+          itinerary={itinerary}
+          timeFrame={timeFrame}
+          timeZone={selectedTimeZone}
+        />
       </View>
     </ContainerTab>
   );

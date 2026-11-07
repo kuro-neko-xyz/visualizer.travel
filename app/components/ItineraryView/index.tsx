@@ -2,7 +2,6 @@ import generateRandomColorFromCode from "@/helpers/shared/generateRandomColorFro
 import { Accommodations } from "@/models/Accommodation";
 import { ItineraryElement } from "@/models/Itinerary";
 import TimeFrame from "@/models/TimeFrame";
-import { getTimeZones } from "@vvo/tzdb";
 import { FC } from "react";
 import {
   ScrollView,
@@ -17,7 +16,6 @@ import { DAY_HEIGHT } from "@/constants/layout";
 
 interface ItineraryViewProps {
   accommodations?: Accommodations;
-  initialTimeZone: string;
   itinerary: ItineraryElement[];
   timeFrame: TimeFrame;
   timeZone: string;
@@ -25,7 +23,6 @@ interface ItineraryViewProps {
 
 const ItineraryView: FC<ItineraryViewProps> = ({
   accommodations,
-  initialTimeZone,
   itinerary,
   timeFrame,
   timeZone,
@@ -34,24 +31,6 @@ const ItineraryView: FC<ItineraryViewProps> = ({
 
   const scheme = useColorScheme();
   const isLight = scheme === "light";
-
-  const timeZones = getTimeZones();
-
-  const extendedInitialTimeZone = timeZones.find(
-    (tz) => initialTimeZone === tz.name || tz.group.includes(initialTimeZone),
-  );
-
-  const extendedTimeZone = timeZones.find(
-    (tz) => timeZone === tz.name || tz.group.includes(timeZone),
-  );
-
-  const difference =
-    (extendedTimeZone?.currentTimeOffsetInMinutes ?? 0) -
-    (extendedInitialTimeZone?.currentTimeOffsetInMinutes ?? 0);
-
-  const padding = -Math.floor(difference / 1440);
-
-  const displacement = (difference * DAY_HEIGHT) / 1440 + padding * DAY_HEIGHT;
 
   const heights = itinerary.map(
     (element) =>
@@ -74,18 +53,6 @@ const ItineraryView: FC<ItineraryViewProps> = ({
       </View>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.itineraryContainer}>
-          <View
-            key={"origin"}
-            style={{
-              backgroundColor: generateRandomColorFromCode(
-                itinerary[0].location,
-              ),
-              minHeight: displacement,
-              maxHeight: displacement,
-              overflowY: "hidden",
-              width: 40,
-            }}
-          />
           {itinerary.map((element, index) => {
             const height = heights[index];
 
@@ -145,7 +112,7 @@ const ItineraryView: FC<ItineraryViewProps> = ({
                     minHeight: height,
                     maxHeight: height,
                     position: "absolute",
-                    top: displacement + padding,
+                    top: padding,
                     overflowY: "hidden",
                     width: 40,
                   }}
