@@ -21,12 +21,12 @@ const parseDateString = ({
     (tz) => timeZone === tz.name || tz.group.includes(timeZone),
   );
 
-  const offset = extendedTimeZone?.currentTimeFormat.substring(0, 6);
+  const offset =
+    extendedTimeZone?.currentTimeFormat.substring(0, 6) ?? "+00:00";
+  const offsetMinutes = extendedTimeZone?.currentTimeOffsetInMinutes ?? 0;
 
   const newDate = addOffset
-    ? new Date(
-        dummyDate.getTime() + parseInt(offset ?? "0", 10) * 60 * 60 * 1000,
-      )
+    ? new Date(dummyDate.getTime() + offsetMinutes * 60 * 1000)
     : new Date(dummyDate);
 
   const year = newDate.getUTCFullYear();

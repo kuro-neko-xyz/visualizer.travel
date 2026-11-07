@@ -2,7 +2,10 @@ import { Flights } from "@/models/Flight";
 import TimeFrame from "@/models/TimeFrame";
 import parseDateString from "../shared/parseDateString";
 
-const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {
+const getTimeFrame = (
+  sortedFlights: Flights,
+  selectedTimeZone: string,
+): TimeFrame | null => {
   const firstFlight = sortedFlights[0];
   const lastFlight = sortedFlights[sortedFlights.length - 1];
 
@@ -12,7 +15,7 @@ const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {
 
   const firstDeparture = parseDateString({
     dummyDate: new Date(firstFlight.origin.dateTime),
-    timeZone: firstFlight.origin.timeZone,
+    timeZone: selectedTimeZone,
     overrideHours: 0,
     overrideMinutes: 0,
   });
@@ -21,7 +24,7 @@ const getTimeFrame = (sortedFlights: Flights): TimeFrame | null => {
 
   const lastArrival = parseDateString({
     dummyDate: new Date(lastFlight.destination.dateTime),
-    timeZone: lastFlight.destination.timeZone,
+    timeZone: selectedTimeZone,
     overrideHours: 23,
     overrideMinutes: 59,
   });
