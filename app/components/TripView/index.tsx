@@ -1,9 +1,17 @@
 import { Dispatch, FC, SetStateAction, useMemo, useState } from "react";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import FlightInfo from "../FlightInfo";
 import { Trips, Trip } from "@/models/Trip";
 import { Picker } from "@react-native-picker/picker";
 import AccommodationInfo from "../AccommodationInfo";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import handleHideTrip from "@/helpers/flights/handleHideTrip";
 
 interface TripViewProps {
   mode?: "flights" | "accommodations";
@@ -12,6 +20,8 @@ interface TripViewProps {
 }
 
 const TripView: FC<TripViewProps> = ({ mode = "flights", setTrips, trip }) => {
+  const isExpanded = !trip.isHidden;
+
   const scheme = useColorScheme();
   const isLight = scheme === "light";
 
@@ -37,69 +47,89 @@ const TripView: FC<TripViewProps> = ({ mode = "flights", setTrips, trip }) => {
     }));
   }, [trip.flights]);
 
+  const handleExpansion = () => {
+    handleHideTrip({
+      setTrips,
+      tripId: trip.uuid,
+    });
+  };
+
   return (
     <View key={trip.uuid}>
-      <Text
-        style={[
-          styles.label,
-          styles.header,
-          isLight ? styles.labelLight : styles.labelDark,
-        ]}
-      >
-        {trip.name}
-      </Text>
-      <View style={styles.row}>
+      <Pressable onPress={handleExpansion} style={styles.row}>
         <Text
-          style={[styles.label, isLight ? styles.labelLight : styles.labelDark]}
-        >
-          Time Zone:
-        </Text>
-        <Picker
-          dropdownIconColor={isLight ? "black" : "white"}
           style={[
-            styles.picker,
-            isLight ? styles.pickerLight : styles.pickerDark,
+            styles.label,
+            styles.header,
+            isLight ? styles.labelLight : styles.labelDark,
           ]}
-          selectedValue={selectedTimezone}
-          onValueChange={(tz) => setSelectedTimeZone(tz)}
         >
-          {options.map((option) => (
-            <Picker.Item
-              key={option.value}
-              label={option.label}
-              value={option.value}
-            />
-          ))}
-        </Picker>
+          {trip.name}
+        </Text>
+        <Ionicons
+          name={isExpanded ? "caret-up" : "caret-down"}
+          size={20}
+          color={isLight ? "black" : "white"}
+          style={styles.header}
+        />
+      </Pressable>
+      <View style={isExpanded ? null : styles.hidden}>
+        <View style={styles.row}>
+          <Text
+            style={[
+              styles.label,
+              isLight ? styles.labelLight : styles.labelDark,
+            ]}
+          >
+            Time Zone:
+          </Text>
+          <Picker
+            dropdownIconColor={isLight ? "black" : "white"}
+            style={[
+              styles.picker,
+              isLight ? styles.pickerLight : styles.pickerDark,
+            ]}
+            selectedValue={selectedTimezone}
+            onValueChange={(tz) => setSelectedTimeZone(tz)}
+          >
+            {options.map((option) => (
+              <Picker.Item
+                key={option.value}
+                label={option.label}
+                value={option.value}
+              />
+            ))}
+          </Picker>
+        </View>
+        {mode === "flights" && (
+          <View style={styles.cardsContainer}>
+            {trip.flights?.map((flight) => (
+              <FlightInfo
+                key={flight.id}
+                flight={flight}
+                setSelectedTimeZone={setSelectedTimeZone}
+                setTrips={setTrips}
+                timeZone={selectedTimezone}
+                trip={trip}
+              />
+            ))}
+          </View>
+        )}
+        {mode === "accommodations" && (
+          <View style={styles.cardsContainer}>
+            {trip.accommodations?.map((accommodation) => (
+              <AccommodationInfo
+                key={accommodation.id}
+                accommodation={accommodation}
+                setSelectedTimeZone={setSelectedTimeZone}
+                setTrips={setTrips}
+                timeZone={selectedTimezone}
+                trip={trip}
+              />
+            ))}
+          </View>
+        )}
       </View>
-      {mode === "flights" && (
-        <View style={styles.cardsContainer}>
-          {trip.flights?.map((flight) => (
-            <FlightInfo
-              key={flight.id}
-              flight={flight}
-              setSelectedTimeZone={setSelectedTimeZone}
-              setTrips={setTrips}
-              timeZone={selectedTimezone}
-              trip={trip}
-            />
-          ))}
-        </View>
-      )}
-      {mode === "accommodations" && (
-        <View style={styles.cardsContainer}>
-          {trip.accommodations?.map((accommodation) => (
-            <AccommodationInfo
-              key={accommodation.id}
-              accommodation={accommodation}
-              setSelectedTimeZone={setSelectedTimeZone}
-              setTrips={setTrips}
-              timeZone={selectedTimezone}
-              trip={trip}
-            />
-          ))}
-        </View>
-      )}
     </View>
   );
 };
@@ -119,6 +149,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     marginTop: 20,
+  },
+  hidden: {
+    height: 0,
+    overflow: "hidden",
   },
   cardsContainer: {
     minWidth: "100%",
